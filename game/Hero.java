@@ -100,7 +100,7 @@ public abstract class Hero {
         return immobilized;
     }
 
-    final void getXpWinner(final int opponentLevel) {
+    private void getXpWinner(final int opponentLevel) {
         final int xpCoefficient = 40;
         final int points = 200;
         int additionalXp = points - (this.level - opponentLevel)
@@ -108,7 +108,7 @@ public abstract class Hero {
         this.xp += Math.max(0, additionalXp);
     }
 
-    final void levelUp() {
+    private void levelUp() {
         final int xpLevelOne = 250;
         final int coefficient = 50;
         int xpLevelUp = xpLevelOne + this.level * coefficient;
