@@ -87,7 +87,7 @@ public class Knight extends Hero implements Visitable {
         float executeDamageGived, slamDamageGived;
 
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
-        float hpLimit = hpLimitCoefficient * maxHp;  // determinare hp limit
+        float hpLimit = hpLimitCoefficient * maxHp;
 
         hpLimit += (float) this.getLevel() * hundreadPercentage * maxHp;
 

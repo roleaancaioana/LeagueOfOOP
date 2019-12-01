@@ -30,9 +30,7 @@ public class WizardVisitor implements Visitor {
     @Override
     public final void attack(final Wizard wizard) {
         final float drainWizardModifier = 1.05f;
-        final float deflectWizardModifier = 1f;
         drainModifier = drainWizardModifier;
-        deflectModifier = deflectWizardModifier; /* nu afecteaza game.Wizard */
     }
     final float getDrainModifier() {
         return drainModifier;

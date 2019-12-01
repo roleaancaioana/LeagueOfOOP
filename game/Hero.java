@@ -125,7 +125,7 @@ public abstract class Hero {
             int levelCurrent = this.level;
             this.level = ((this.xp - xpLevelOne) / coefficient) + 1;
             if (levelCurrent != this.level) {
-                this.hp = initialHp + hpPerLevel * (this.level - levelCurrent); // revine la 100% hp
+                this.hp = initialHp + hpPerLevel * (this.level - levelCurrent);
             }
         }
     }
