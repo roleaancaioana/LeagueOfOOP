@@ -37,6 +37,8 @@ clasei Game si am afisat datele de iesire. Este suficient sa creez o instanta
 a clasei Game pentru a pune jocul "in functiune" deoarece in constructorul
 acestei clase se apeleaza metode care pun in aplicare regulile jocului.
 
+- De asemenea, precizez faptul ca diagrama UML corespunzatoare acestui proiect
+este reprezentata in fotografia atasata arhivei.
 
 ======================Mentiuni asupra modului de implementare==================
 
