@@ -23,6 +23,7 @@ public class Game {
             System.err.println("Error");
         }
 
+        assert this.scanner != null;
         this.n = this.scanner.nextInt();
         this.m = this.scanner.nextInt();
         this.scanner.nextLine();
@@ -118,7 +119,6 @@ public class Game {
                 }
                 heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
             }
-
 
             if (round != 0) {
                 for (i = 0; i < p; i++) {
