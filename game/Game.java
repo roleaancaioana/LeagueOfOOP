@@ -138,9 +138,8 @@ public class Game {
                     if (!heroList[i].isDead() && !heroList[j].isDead()
                             && heroList[i].getX() == heroList[j].getX()
                             && heroList[i].getY() == heroList[j].getY()) {
-
-                            heroList[i].attack(heroList[j]);
-                            heroList[j].attack(heroList[i]);
+                        heroList[i].attack(heroList[j]);
+                        heroList[j].attack(heroList[i]);
 
                         if (heroList[i].isDead()) {
                             heroList[j].afterFightEffects(heroList[i].getLevel());
