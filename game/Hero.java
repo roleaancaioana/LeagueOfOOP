@@ -4,7 +4,7 @@ public abstract class Hero {
     private int xp, hp, level, initialHp, hpPerLevel;
     private int x, y;
     private char land;
-    private int damage; //damage primit
+    private int damage;
     private int damageOvertime;
     private boolean dead;
     private int passiveTurns;
@@ -52,8 +52,8 @@ public abstract class Hero {
         this.passiveTurns--;
     }
 
-    final void setDead(final boolean dead) {
-        this.dead = dead;
+    final void setDead() {
+        this.dead = true;
     }
 
     final void setInitialHp(final int initialHp) {
@@ -100,6 +100,11 @@ public abstract class Hero {
         return immobilized;
     }
 
+    /**
+     * Aceasta metoda ma va ajuta sa-i acord eroului care a castigat o lupta
+     * XP-ul corespunzator.
+     * @param opponentLevel reprezinta nivelul eroului care a fost invins
+     */
     private void getXpWinner(final int opponentLevel) {
         final int xpCoefficient = 40;
         final int points = 200;
@@ -108,6 +113,10 @@ public abstract class Hero {
         this.xp += Math.max(0, additionalXp);
     }
 
+    /**
+     * Aceasta metoda ma va ajuta sa modific nivelul unui erou la finalul
+     * unei lupte in care acesta a fost implicat.
+     */
     private void levelUp() {
         final int xpLevelOne = 250;
         final int coefficient = 50;
@@ -121,7 +130,7 @@ public abstract class Hero {
         }
     }
 
-    final void receiveDamage() {
+    private void receiveDamage() {
         this.hp -= this.damage;
     }
 
@@ -129,6 +138,12 @@ public abstract class Hero {
         this.damage = damage;
     }
 
+    /**
+     * Prin intermediul acestei metode orice erou care este implicat
+     * intr-o lupta va primi la final un damage activ care poate fi
+     * fatal sau nu. Daca este fatal, atunci vom marca faptul ca eroul
+     * a murit.
+     */
     final void getActiveDamage() {
         this.receiveDamage();
         if (this.hp <= 0) {
@@ -136,6 +151,13 @@ public abstract class Hero {
         }
     }
 
+    /**
+     * Aceasta metoda ma va ajuta la mutarea jucatorilor intr-o alta locatie
+     * de pe harta.
+     * @param newX reprezinta randul pe care se va muta eroul
+     * @param newY reprezinta coloana pe care se va muta eroul
+     * @param newLand reprezinta tipul terenului pe care se va muta eroul
+     */
     final void move(final int newX, final int newY, final char newLand) {
         if (this.immobilized == 0) {
                 this.land = newLand;
@@ -147,6 +169,11 @@ public abstract class Hero {
         }
     }
 
+    /**
+     * Aceasta metoda ma va ajuta sa-i modific eroului care a fost implicat intr-o lupta
+     * XP-ul si nivelul.
+     * @param heroLevel
+     */
     final void afterFightEffects(final int heroLevel) {
         getXpWinner(heroLevel);
         levelUp();

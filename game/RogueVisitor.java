@@ -2,6 +2,7 @@ package game;
 
 public class RogueVisitor implements Visitor {
     private float backstabModifier, paralysisModifier;
+
     @Override
     public final void attack(final Pyromancer pyromancer) {
         final float backstabPyromancerModifier = 1.25f;

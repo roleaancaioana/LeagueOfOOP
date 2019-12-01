@@ -2,6 +2,7 @@ package game;
 
 public class KnightVisitor implements Visitor {
     private float executeModifier, slamModifier;
+
     @Override
     public final void attack(final Pyromancer pyromancer) {
         final float executePyromancerModifier = 1.1f;

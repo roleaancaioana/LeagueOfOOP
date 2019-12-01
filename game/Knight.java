@@ -19,6 +19,10 @@ public class Knight extends Hero implements Visitable {
         super.setHp(hpKnight);
     }
 
+    /**
+     * Aceasta metoda ilustreaza modul de atac al unui erou de tip Knight.
+     * @param hero reprezinta oponentul eroului Knight.
+     */
     @Override
     public final void attack(final Hero hero) {
         float executeDamage, slamDamage;
@@ -31,7 +35,7 @@ public class Knight extends Hero implements Visitable {
         slamModifier = visitor.getSlamModifier();
 
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
-        float hpLimit = hpLimitCoefficient * maxHp;  // determinare hp limit
+        float hpLimit = hpLimitCoefficient * maxHp;
 
         hpLimit += (float) this.getLevel() * hundreadPercentage * maxHp;
 
@@ -39,27 +43,33 @@ public class Knight extends Hero implements Visitable {
             hpLimit = maxHpLimit;
         }
 
-
         if ((float) hero.getHp() < hpLimit) {
-            executeDamage = hero.getHp(); /*damage-ul este egal cu hp-ul adversarului*/
-            slamDamage = 0; /* daca adversarul e executat nu va mai avea si slamDamage*/
-        } else {  // daca nu este executat adversarul
+            executeDamage = hero.getHp(); /* damage-ul este egal cu hp-ul adversarului */
+            slamDamage = 0; /* adversarul e deja mort si nu mai e nevoie sa-i aplicam slamDamage */
+        } else {
+            /*
+            Calculez damage-ul dat de abilitatea execute.
+             */
             executeDamage = executeBaseDamage + executeBaseDamagePerLevel * this.getLevel();
-
-            // calcul slam damage
-            slamDamage = slamBaseDamage + slamBaseDamagePerLevel * this.getLevel();
-
             executeDamage *= executeModifier;
+
+            /*
+            Calculez damage-ul dat de abilitatea slam.
+             */
+            slamDamage = slamBaseDamage + slamBaseDamagePerLevel * this.getLevel();
             slamDamage *= slamModifier;
 
-            if (this.getLand() == 'L') {  // land modifier aplicat doar
+            /*
+            Aplic amplificatorul corespunzator terenului Land.
+             */
+            if (this.getLand() == 'L') {
                 executeDamage *= landModifier;
-                slamDamage *= landModifier; // daca adversarul nu
-            }  // urmeaza sa fie executat in runda curenta
+                slamDamage *= landModifier;
+            }
         }
 
-        int intExecuteDamage = (int) Math.round(executeDamage);
-        int intSlamDamage = (int) Math.round(slamDamage);
+        int intExecuteDamage = Math.round(executeDamage);
+        int intSlamDamage = Math.round(slamDamage);
         int totalDamage = intExecuteDamage + intSlamDamage;
 
         hero.becomeImmobilized(roundsImobilised);
@@ -67,6 +77,12 @@ public class Knight extends Hero implements Visitable {
         hero.getActiveDamage();
     }
 
+    /**
+     * Aceasta metoda ma va ajuta la calculul damage-ului total, fara amplificatorii
+     * de rasa, pe care il da acest erou Knight unui erou de tip Wizard.
+     * @param hero reprezinta eroul Wizard cu care se va lupta acest erou Knight
+     * @return damage-ul total dat, fara amplificatorii de rasa
+     */
     final int damageWithoutRaceModifiers(final Hero hero) {
         float executeDamageGived, slamDamageGived;
 
@@ -80,23 +96,22 @@ public class Knight extends Hero implements Visitable {
         }
 
         if ((float) hero.getHp() < hpLimit && hero.getHp() > 0) {
-            executeDamageGived = hero.getHp(); /*damage-ul este egal cu hp-ul adversarului*/
-            slamDamageGived = 0; /* daca adversarul e executat nu va mai avea si slamDamage*/
-        } else {  // daca nu este executat adversarul
+            executeDamageGived = hero.getHp();
+            slamDamageGived = 0;
+        } else {
             executeDamageGived = executeBaseDamage + executeBaseDamagePerLevel * this.getLevel();
 
-            // calcul slam damage
             slamDamageGived = slamBaseDamage + slamBaseDamagePerLevel * this.getLevel();
 
-            if (this.getLand() == 'L') {  // land modifier aplicat doar
+            if (this.getLand() == 'L') {
                 executeDamageGived *= landModifier;
-                slamDamageGived *= landModifier; // daca adversarul nu
-            }  // urmeaza sa fie executat in runda curenta
+                slamDamageGived *= landModifier;
+            }
 
         }
 
-        int intExecuteDamageGived = (int) Math.round(executeDamageGived);
-        int intSlamDamageGived = (int) Math.round(slamDamageGived);
+        int intExecuteDamageGived = Math.round(executeDamageGived);
+        int intSlamDamageGived = Math.round(slamDamageGived);
         return (intExecuteDamageGived + intSlamDamageGived);
     }
 

@@ -2,6 +2,7 @@ package game;
 
 public class WizardVisitor implements Visitor {
     private float drainModifier, deflectModifier;
+
     @Override
     public final void attack(final Pyromancer pyromancer) {
         final float drainPyromancerModifier = 0.9f;

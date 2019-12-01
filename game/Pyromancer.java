@@ -11,6 +11,10 @@ public class Pyromancer extends Hero implements Visitable {
         super.setHp(hpPyromancer);
     }
 
+    /**
+     * Aceasta metoda ilustreaza modul de atac al unui erou de tip Pyromancer.
+     * @param hero reprezinta oponentul eroului de tip Pyromancer.
+     */
     @Override
     public final void attack(final Hero hero) {
         int passiveTurns = 2;
@@ -23,11 +27,9 @@ public class Pyromancer extends Hero implements Visitable {
         hero.accept(visitor);
         float modifier = visitor.getModifier();
 
-
-        final float volcanicModifier = 1.25f;
-        int intFireblastDamage = getFireblastDamage(hero, modifier, volcanicModifier);
-        int intTotalIgniteBaseDamage = getActiveIgniteDamage(hero, modifier, volcanicModifier);
-        int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage(hero, modifier, volcanicModifier);
+        int intFireblastDamage = getFireblastDamage(modifier);
+        int intTotalIgniteBaseDamage = getActiveIgniteDamage(modifier);
+        int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage(modifier);
 
         int totalActiveDamage = intFireblastDamage + intTotalIgniteBaseDamage;
 
@@ -37,10 +39,16 @@ public class Pyromancer extends Hero implements Visitable {
         hero.getActiveDamage();
     }
 
-    private int getFireblastDamage(final Hero hero, final float modifier,
-                                   final float volcanicModifier) {
-        final float initialFireblastDamage = 350;  // calcul damage fireblast
+    /**
+     * Aceasta metoda ma va ajuta la calculul damage-ului rezultat in urma
+     * aplicarii abilitatii Fireblast.
+     * @param modifier reprezinta amplificatorul de rasa
+     * @return valoarea damage-ului dat de abilitatea Fireblast
+     */
+    private int getFireblastDamage(final float modifier) {
+        final float initialFireblastDamage = 350;
         final float fireblastDamagePerLevel = 50;
+        final float volcanicModifier = 1.25f;
 
         float fireblastDamage = initialFireblastDamage + fireblastDamagePerLevel * this.getLevel();
         fireblastDamage *= modifier;
@@ -51,10 +59,17 @@ public class Pyromancer extends Hero implements Visitable {
         return (Math.round(fireblastDamage));
     }
 
-    private int getActiveIgniteDamage(final Hero hero, final float modifier,
-                                      final float volcanicModifier) {
-        final float igniteBaseDamage = 150;  // calcul damage ignite
+
+    /**
+     * Metoda ma va ajuta la calculul damage-ului activ rezultat din
+     * abilitatea Ignite a acestui erou si aplicat asupra oponentului sau.
+     * @param modifier reprezinta amplificatorul de rasa
+     * @return valoarea damage-ului activ dat de abilitatea Ignite
+     */
+    private int getActiveIgniteDamage(final float modifier) {
+        final float igniteBaseDamage = 150;
         final float igniteBaseDamagePerLevel = 20;
+        final float volcanicModifier = 1.25f;
 
         float totalIgniteBaseDamage = igniteBaseDamage + igniteBaseDamagePerLevel * this.getLevel();
 
@@ -66,10 +81,16 @@ public class Pyromancer extends Hero implements Visitable {
         return (Math.round(totalIgniteBaseDamage));
     }
 
-    private int getPassiveIgniteDamage(final Hero hero, final float modifier,
-                                       final float volcanicModifier) {
+    /**
+     * Metoda ma va ajuta la calculul damage-ului pasiv rezultat din
+     * abilitatea Ignite a acestui erou.
+     * @param modifier reprezinta amplificatorul de rasa
+     * @return valoarea damage-ului pasiv dat de abilitatea Ignite
+     */
+    private int getPassiveIgniteDamage(final float modifier) {
         final float igniteDamagePerTurn = 50;
         final float igniteDamagePerTurnPerLevel = 30;
+        final float volcanicModifier = 1.25f;
 
         float totalIgniteDamagePerTurn = igniteDamagePerTurn
                 + igniteDamagePerTurnPerLevel * this.getLevel();
@@ -82,14 +103,16 @@ public class Pyromancer extends Hero implements Visitable {
         return (Math.round(totalIgniteDamagePerTurn));
     }
 
-    /*
-    Aceasta functie calculeaza damage-ul total, fara race modifiers, dat de erou.
+    /**
+     * Aceasta metoda ma va ajuta la calculul damage-ului total, fara amplificatorii
+     * de rasa, pe care il da acest erou Pyromancer unui erou de tip Wizard.
+     * @return damage-ul total dat, fara amplificatorii de rasa.
      */
-    final int damageWithoutRaceModifiers(final Hero hero) {
-        final float initialFireblastDamage = 350;  // calcul damage fireblast
+    final int damageWithoutRaceModifiers() {
+        final float initialFireblastDamage = 350;
         final float fireblastDamagePerLevel = 50;
         final float volcanicModifier = 1.25f;
-        final float igniteBaseDamage = 150;  // calcul damage ignite
+        final float igniteBaseDamage = 150;
         final float igniteBaseDamagePerLevel = 20;
 
         float fireblastDamageGived = initialFireblastDamage
@@ -101,8 +124,8 @@ public class Pyromancer extends Hero implements Visitable {
             igniteDamageGived *= volcanicModifier;
         }
 
-        int intFireblastDamageGived = (int) Math.round(fireblastDamageGived);
-        int intIgniteDamageGived = (int) Math.round(igniteDamageGived);
+        int intFireblastDamageGived = Math.round(fireblastDamageGived);
+        int intIgniteDamageGived = Math.round(igniteDamageGived);
 
         return (intFireblastDamageGived + intIgniteDamageGived);
     }
