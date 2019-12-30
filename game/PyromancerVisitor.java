@@ -1,6 +1,10 @@
 package game;
 
+<<<<<<< HEAD
 public class PyromancerVisitor implements FighterVisitor {
+=======
+public class PyromancerVisitor implements Visitor {
+>>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     private float modifier;
 
     @Override

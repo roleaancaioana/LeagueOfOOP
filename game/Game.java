@@ -14,7 +14,10 @@ public class Game {
     private int p, r;
     private Hero[] heroList;
     private char[][] mapMove;
+<<<<<<< HEAD
     Map map = Map.getInstance();
+=======
+>>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
     public Game(final String inputName, final String outputName) {
         try {
@@ -39,6 +42,7 @@ public class Game {
 
     }
 
+<<<<<<< HEAD
     public void chooseTheBestStrategy(Hero hero) {
         int maxLevelHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
         if (maxLevelHp/3 < hero.getHp() && hero.getHp() < maxLevelHp/2 && hero.getHeroType() == 'K') {
@@ -70,6 +74,8 @@ public class Game {
         }
     }
 
+=======
+>>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      *  Metoda construieste eroii ce vor lua parte la joc si ii plaseaza pe toti intr-un vector.
      */
@@ -112,11 +118,17 @@ public class Game {
         for (i = 0; i < n; i++) {
             String line = this.scanner.nextLine();
             for (j = 0; j < m; j++) {
+<<<<<<< HEAD
                 //map.buildMap(line.charAt(j), i, j);
                 mapLand[i][j] = line.charAt(j);
             }
         }
         map.buildMap(mapLand);
+=======
+                mapLand[i][j] = line.charAt(j);
+            }
+        }
+>>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     }
 
     /**
