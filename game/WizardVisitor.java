@@ -1,10 +1,6 @@
 package game;
 
-<<<<<<< HEAD
 public class WizardVisitor implements FighterVisitor {
-=======
-public class WizardVisitor implements Visitor {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     private float drainModifier, deflectModifier;
 
     @Override

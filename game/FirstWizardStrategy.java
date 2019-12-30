@@ -9,7 +9,7 @@ public class FirstWizardStrategy implements Strategy {
 
     @Override
     public float changeDamage(float damageCoefficient) {
-        damageCoefficient *= 1.6f;
+        damageCoefficient += 0.6f;
         return damageCoefficient;
     }
 }

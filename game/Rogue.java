@@ -1,12 +1,8 @@
 package game;
 
-<<<<<<< HEAD
 import angels.AngelVisitor;
 
-public class Rogue extends Hero implements Fighter, Angel {
-=======
-public class Rogue extends Hero implements Visitable {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
+public class Rogue extends Hero implements Fighter {
     private final int hpRogue = 600;
     private final int hpPerLevelRogue = 40;
     private int counterAttacksRogue;
@@ -18,16 +14,10 @@ public class Rogue extends Hero implements Visitable {
     private final float bonusWoodsModifier = 1.15f;
     private int oldCounterAttacksRogue;
     private final int attacksCoefficient = 3;
-<<<<<<< HEAD
     private float paralysisModifier, backstabModifier;
 
     Rogue(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land);
-=======
-
-    Rogue(final int x, final int y, final char land) {
-        super(x, y, land);
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         super.setInitialHp(hpRogue);
         super.setHpPerLevel(hpPerLevelRogue);
         super.setHp(hpRogue);
@@ -35,7 +25,6 @@ public class Rogue extends Hero implements Visitable {
         this.oldCounterAttacksRogue = 0;
     }
 
-<<<<<<< HEAD
     @Override
     public void executeStrategy() {
         Strategy strategy = super.getStrategy();
@@ -45,8 +34,6 @@ public class Rogue extends Hero implements Visitable {
         this.backstabModifier = strategy.changeDamage(this.backstabModifier);
     }
 
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      * Aceasta metoda ilustreaza modul de atac al unui erou de tip Rogue.
      * @param hero reprezinta oponentul eroului de tip Rogue.
@@ -85,11 +72,7 @@ public class Rogue extends Hero implements Visitable {
         RogueVisitor visitor = new RogueVisitor();
         hero.accept(visitor);
 
-<<<<<<< HEAD
         backstabModifier = visitor.getBackstabModifier();
-=======
-        float backstabModifier = visitor.getBackstabModifier();
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
         float backstabDamage = backstabBaseDamage + this.getLevel() * backstabBaseDamagePerLevel;
 
@@ -123,11 +106,7 @@ public class Rogue extends Hero implements Visitable {
         RogueVisitor visitor = new RogueVisitor();
         hero.accept(visitor);
 
-<<<<<<< HEAD
         paralysisModifier = visitor.getParalysisModifier();
-=======
-        float paralysisModifier = visitor.getParalysisModifier();
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         float paralysisDamage = paralysisBaseDamage + paralysisBaseDamagePerLevel * this.getLevel();
 
         /*
@@ -171,7 +150,6 @@ public class Rogue extends Hero implements Visitable {
     }
 
     @Override
-<<<<<<< HEAD
     public final void accept(final FighterVisitor v) {
         v.attack(this);
     }
@@ -196,9 +174,4 @@ public class Rogue extends Hero implements Visitable {
     public void receiveAngelPower(AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
-=======
-    public final void accept(final Visitor v) {
-        v.attack(this);
-    }
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 }

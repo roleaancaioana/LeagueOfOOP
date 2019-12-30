@@ -9,7 +9,7 @@ public class FirstKnightStrategy implements Strategy {
 
     @Override
     public float changeDamage(float damageCoefficient) {
-        damageCoefficient *= 1.5f;
+        damageCoefficient += 0.5f;
         return damageCoefficient;
     }
 }

@@ -5,11 +5,15 @@ import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
-public class Dracula implements AngelVisitor {
+public class Dracula extends AngelVisitor {
+    Dracula(String angelType, int x, int y) {
+        super(angelType, x, y);
+    }
+
     @Override
     public final void angelPower(Pyromancer pyromancer) {
-        final float angelDamageModifier = 0.7f;
-        float newModifier = pyromancer.getModifier() * angelDamageModifier;
+        final float angelDamageModifier = 0.3f;
+        float newModifier = pyromancer.getModifier() - angelDamageModifier;
         pyromancer.setModifier(newModifier);
 
         final int angelHpModifier = 40;
@@ -19,10 +23,10 @@ public class Dracula implements AngelVisitor {
 
     @Override
     public final void angelPower(Knight knight) {
-        final float angelDamageModifier = 0.8f;
+        final float angelDamageModifier = 0.2f;
 
-        float newSlamModifier = knight.getSlamModifier() * angelDamageModifier;
-        float newExecuteModifier = knight.getExecuteModifier() * angelDamageModifier;
+        float newSlamModifier = knight.getSlamModifier() - angelDamageModifier;
+        float newExecuteModifier = knight.getExecuteModifier() - angelDamageModifier;
 
         knight.setExecuteModifier(newExecuteModifier);
         knight.setSlamModifier(newSlamModifier);
@@ -34,10 +38,10 @@ public class Dracula implements AngelVisitor {
 
     @Override
     public final void angelPower(Rogue rogue) {
-        final float angelDamageModifier = 0.9f;
+        final float angelDamageModifier = 0.1f;
 
-        float newBackstabModifier = rogue.getBackstabModifier() * angelDamageModifier;
-        float newParalysisModifier = rogue.getParalysisModifier() * angelDamageModifier;
+        float newBackstabModifier = rogue.getBackstabModifier() - angelDamageModifier;
+        float newParalysisModifier = rogue.getParalysisModifier() - angelDamageModifier;
 
         rogue.setBackstabModifier(newBackstabModifier);
         rogue.setParalysisModifier(newParalysisModifier);
@@ -49,10 +53,10 @@ public class Dracula implements AngelVisitor {
 
     @Override
     public final void angelPower(Wizard wizard) {
-        final float angelDamageModifier = 0.6f;
+        final float angelDamageModifier = 0.4f;
 
-        float newDrainModifier = wizard.getDrainModifier() * angelDamageModifier;
-        float newDeflectModifier = wizard.getDeflectModifier() * angelDamageModifier;
+        float newDrainModifier = wizard.getDrainModifier() - angelDamageModifier;
+        float newDeflectModifier = wizard.getDeflectModifier() - angelDamageModifier;
 
         wizard.setDrainModifier(newDrainModifier);
         wizard.setDeflectModifier(newDeflectModifier);

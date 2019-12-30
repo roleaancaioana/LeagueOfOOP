@@ -1,5 +1,7 @@
 package game;
 
+import angels.AngelVisitor;
+
 public abstract class Hero {
     private int xp, hp, level, initialHp, hpPerLevel;
     private int x, y;
@@ -9,15 +11,10 @@ public abstract class Hero {
     private boolean dead;
     private int passiveTurns;
     private int immobilized;
-<<<<<<< HEAD
     private char heroType;
     private Strategy strategy;
 
     Hero(final char heroType, final int x, final int y, final char land) {
-=======
-
-    Hero(final int x, final int y, final char land) {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         this.xp = 0;
         this.level = 0;
         this.x = x;
@@ -27,8 +24,8 @@ public abstract class Hero {
         this.immobilized = 0;
         this.land = land;
         this.passiveTurns = 0;
-<<<<<<< HEAD
         this.heroType = heroType;
+        this.strategy = null;
     }
 
     public void setStrategy(Strategy strategy) {
@@ -44,10 +41,6 @@ public abstract class Hero {
     public char getHeroType() {
         return heroType;
     }
-=======
-    }
-
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
     final void becomeImmobilized(final int rounds) {
         this.immobilized = rounds;
@@ -86,7 +79,6 @@ public abstract class Hero {
         this.initialHp = initialHp;
     }
 
-<<<<<<< HEAD
     public final int getLevel() {
         return level;
     }
@@ -100,21 +92,6 @@ public abstract class Hero {
     }
 
     public final int getXp() {
-=======
-    final int getLevel() {
-        return level;
-    }
-
-    final int getHp() {
-        return hp;
-    }
-
-    final void setHp(final int hp) {
-        this.hp = hp;
-    }
-
-    final int getXp() {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         return xp;
     }
 
@@ -142,7 +119,6 @@ public abstract class Hero {
         return immobilized;
     }
 
-<<<<<<< HEAD
     public void setDead(boolean dead) {
         this.dead = dead;
     }
@@ -155,8 +131,6 @@ public abstract class Hero {
         this.level = level;
     }
 
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      * Aceasta metoda ma va ajuta sa-i acord eroului care a castigat o lupta
      * XP-ul corespunzator.
@@ -178,11 +152,7 @@ public abstract class Hero {
         final int xpLevelOne = 250;
         final int coefficient = 50;
         int xpLevelUp = xpLevelOne + this.level * coefficient;
-<<<<<<< HEAD
         if (this.xp > xpLevelUp) { // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! >=?
-=======
-        if (this.xp > xpLevelUp) {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
             int levelCurrent = this.level;
             this.level = ((this.xp - xpLevelOne) / coefficient) + 1;
             if (levelCurrent != this.level) {
@@ -242,9 +212,7 @@ public abstract class Hero {
 
     public abstract void attack(Hero hero);
 
-<<<<<<< HEAD
     public abstract void accept(FighterVisitor visitor);
-=======
-    public abstract void accept(Visitor visitor);
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
+
+    public abstract void receiveAngelPower(AngelVisitor angelVisitor);
 }

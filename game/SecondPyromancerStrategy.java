@@ -9,7 +9,7 @@ public class SecondPyromancerStrategy implements Strategy {
 
     @Override
     public float changeDamage(float damageCoefficient) {
-        damageCoefficient *= 0.7f;
+        damageCoefficient -= 0.3f;
         return damageCoefficient;
     }
 }

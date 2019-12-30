@@ -1,23 +1,22 @@
 package game;
 
 public class Map {
-    private static final Map map = new Map();
+    private static Map map;
     private char[][] landTypes;
 
-    private Map() {
-    }
+    private Map() { }
 
     public void buildMap(char[][] landTypes) {
         this.landTypes = landTypes;
     }
 
-    public char[][] getLandTypes() {
-        return landTypes;
+    public char landType(int x, int y) {
+        return landTypes[x][y];
     }
 
     public static Map getInstance() {
         if (map == null) {
-            new Map();
+            map = new Map();
         }
         return map;
     }

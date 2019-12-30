@@ -9,7 +9,7 @@ public class FirstRogueStrategy implements Strategy {
 
     @Override
     public float changeDamage(float damageCoefficient) {
-        damageCoefficient *= 1.4f;
+        damageCoefficient += 0.4f;
         return damageCoefficient;
     }
 }

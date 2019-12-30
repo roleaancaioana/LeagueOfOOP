@@ -5,7 +5,11 @@ import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
-public class DarkAngel implements AngelVisitor {
+public class DarkAngel extends AngelVisitor {
+    DarkAngel(String angelType, int x, int y) {
+        super(angelType, x, y);
+    }
+
     @Override
     public final void angelPower(Pyromancer pyromancer) {
         final int angelModifier = 30;

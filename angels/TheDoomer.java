@@ -5,7 +5,11 @@ import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
-public class TheDoomer implements AngelVisitor {
+public class TheDoomer extends AngelVisitor {
+    TheDoomer(String angelType, int x, int y) {
+        super(angelType, x, y);
+    }
+
     @Override
     public void angelPower(Pyromancer pyromancer) {
         final boolean dead = true;

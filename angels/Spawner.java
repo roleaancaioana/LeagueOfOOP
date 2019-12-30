@@ -5,7 +5,11 @@ import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
-public class Spawner implements AngelVisitor {
+public class Spawner extends AngelVisitor {
+    Spawner(String angelType, int x, int y) {
+        super(angelType, x, y);
+    }
+
     @Override
     public void angelPower(Pyromancer pyromancer) {
         final boolean dead = false;

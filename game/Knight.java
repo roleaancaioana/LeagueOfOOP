@@ -1,12 +1,8 @@
 package game;
 
-<<<<<<< HEAD
 import angels.AngelVisitor;
 
-public class Knight extends Hero implements Fighter, Angel {
-=======
-public class Knight extends Hero implements Visitable {
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
+public class Knight extends Hero implements Fighter {
     private final float executeBaseDamage = 200;
     private final float executeBaseDamagePerLevel = 30;
     private final float slamBaseDamage = 100;
@@ -17,22 +13,15 @@ public class Knight extends Hero implements Visitable {
     private final float landModifier = 1.15f;
     private final int hpKnight = 900;
     private final int hpPerLevelKnight = 80;
-<<<<<<< HEAD
     float executeModifier, slamModifier;
 
     Knight(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land);
-=======
-
-    Knight(final int x, final int y, final char land) {
-        super(x, y, land);
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         super.setInitialHp(hpKnight);
         super.setHpPerLevel(hpPerLevelKnight);
         super.setHp(hpKnight);
     }
 
-<<<<<<< HEAD
     @Override
     public void executeStrategy() {
         Strategy strategy = super.getStrategy();
@@ -42,8 +31,6 @@ public class Knight extends Hero implements Visitable {
         this.executeModifier = strategy.changeDamage(this.executeModifier);
     }
 
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      * Aceasta metoda ilustreaza modul de atac al unui erou de tip Knight.
      * @param hero reprezinta oponentul eroului Knight.
@@ -52,10 +39,6 @@ public class Knight extends Hero implements Visitable {
     public final void attack(final Hero hero) {
         float executeDamage, slamDamage;
         int roundsImobilised = 1;
-<<<<<<< HEAD
-=======
-        float executeModifier, slamModifier;
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
         KnightVisitor visitor = new KnightVisitor();
         hero.accept(visitor);
@@ -144,7 +127,6 @@ public class Knight extends Hero implements Visitable {
     }
 
     @Override
-<<<<<<< HEAD
     public final void accept(final FighterVisitor v) {
         v.attack(this);
     }
@@ -169,10 +151,4 @@ public class Knight extends Hero implements Visitable {
     public void receiveAngelPower(AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
-=======
-    public final void accept(final Visitor v) {
-        v.attack(this);
-    }
-
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 }

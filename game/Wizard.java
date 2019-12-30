@@ -1,29 +1,19 @@
 package game;
 
-<<<<<<< HEAD
 import angels.AngelVisitor;
 
-public class Wizard extends Hero implements Fighter, Angel {
+public class Wizard extends Hero implements Fighter {
     private final int hpWizard = 400;
     private final int hpPerLevelWizard = 30;
     private float deflectModifier, drainModifier;
 
     Wizard(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land);
-=======
-public class Wizard extends Hero implements Visitable {
-    private final int hpWizard = 400;
-    private final int hpPerLevelWizard = 30;
-
-    Wizard(final int x, final int y, final char land) {
-        super(x, y, land);
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
         super.setInitialHp(hpWizard);
         super.setHpPerLevel(hpPerLevelWizard);
         super.setHp(hpWizard);
     }
 
-<<<<<<< HEAD
     @Override
     public void executeStrategy() {
         Strategy strategy = super.getStrategy();
@@ -33,8 +23,6 @@ public class Wizard extends Hero implements Visitable {
         this.drainModifier = strategy.changeDamage(this.drainModifier);
     }
 
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      * Aceasta metoda ilustreaza modul de atac al unui erou de tip Wizard.
      * @param hero reprezinta oponentul eroului de tip Wizard.
@@ -64,11 +52,7 @@ public class Wizard extends Hero implements Visitable {
 
         WizardVisitor visitor = new WizardVisitor();
         hero.accept(visitor);
-<<<<<<< HEAD
         drainModifier = visitor.getDrainModifier();
-=======
-        float drainModifier = visitor.getDrainModifier();
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
         float drainPercentage = initialDrainPercentage + perLevelDrainPercentage * this.getLevel();
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
@@ -107,11 +91,7 @@ public class Wizard extends Hero implements Visitable {
 
         WizardVisitor visitor = new WizardVisitor();
         hero.accept(visitor);
-<<<<<<< HEAD
         deflectModifier = visitor.getDeflectModifier();
-=======
-        float deflectModifier = visitor.getDeflectModifier();
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
         float deflectPercentage = initialDeflectPercentage
                 + this.getLevel() * perLevelDeflectPercentage;
@@ -146,7 +126,6 @@ public class Wizard extends Hero implements Visitable {
     }
 
     @Override
-<<<<<<< HEAD
     public final void accept(final FighterVisitor v) {
         v.attack(this);
     }
@@ -171,9 +150,4 @@ public class Wizard extends Hero implements Visitable {
     public void receiveAngelPower(AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
-=======
-    public final void accept(final Visitor v) {
-        v.attack(this);
-    }
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 }

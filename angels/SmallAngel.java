@@ -5,11 +5,15 @@ import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
-public class SmallAngel implements AngelVisitor {
+public class SmallAngel extends AngelVisitor {
+    SmallAngel(String angelType, int x, int y) {
+        super(angelType, x, y);
+    }
+
     @Override
     public void angelPower(Pyromancer pyromancer) {
-        final float angelDamageModifier = 1.15f;
-        float newModifier = pyromancer.getModifier() * angelDamageModifier;
+        final float angelDamageModifier = 0.15f;
+        float newModifier = pyromancer.getModifier() + angelDamageModifier;
         pyromancer.setModifier(newModifier);
 
         final int angelHpModifier = 15;
@@ -19,10 +23,10 @@ public class SmallAngel implements AngelVisitor {
 
     @Override
     public void angelPower(Knight knight) {
-        final float angelDamageModifier = 1.1f;
+        final float angelDamageModifier = 0.1f;
 
-        float newSlamModifier = knight.getSlamModifier() * angelDamageModifier;
-        float newExecuteModifier = knight.getExecuteModifier() * angelDamageModifier;
+        float newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
+        float newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
 
         knight.setExecuteModifier(newExecuteModifier);
         knight.setSlamModifier(newSlamModifier);
@@ -34,10 +38,10 @@ public class SmallAngel implements AngelVisitor {
 
     @Override
     public void angelPower(Rogue rogue) {
-        final float angelDamageModifier = 1.05f;
+        final float angelDamageModifier = 0.05f;
 
-        float newBackstabModifier = rogue.getBackstabModifier() * angelDamageModifier;
-        float newParalysisModifier = rogue.getParalysisModifier() * angelDamageModifier;
+        float newBackstabModifier = rogue.getBackstabModifier() + angelDamageModifier;
+        float newParalysisModifier = rogue.getParalysisModifier() + angelDamageModifier;
 
         rogue.setBackstabModifier(newBackstabModifier);
         rogue.setParalysisModifier(newParalysisModifier);
@@ -49,10 +53,10 @@ public class SmallAngel implements AngelVisitor {
 
     @Override
     public void angelPower(Wizard wizard) {
-        final float angelDamageModifier = 1.1f;
+        final float angelDamageModifier = 0.1f;
 
-        float newDrainModifier = wizard.getDrainModifier() * angelDamageModifier;
-        float newDeflectModifier = wizard.getDeflectModifier() * angelDamageModifier;
+        float newDrainModifier = wizard.getDrainModifier() + angelDamageModifier;
+        float newDeflectModifier = wizard.getDeflectModifier() + angelDamageModifier;
 
         wizard.setDrainModifier(newDrainModifier);
         wizard.setDeflectModifier(newDeflectModifier);

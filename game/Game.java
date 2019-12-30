@@ -1,5 +1,8 @@
 package game;
 
+import angels.AngelVisitor;
+import angels.AngelsFactory;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,11 +16,10 @@ public class Game {
     private char[][] mapLand;
     private int p, r;
     private Hero[] heroList;
+    private AngelVisitor[] angelsList;
     private char[][] mapMove;
-<<<<<<< HEAD
+    private int numberOfAngels;
     Map map = Map.getInstance();
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
 
     public Game(final String inputName, final String outputName) {
         try {
@@ -37,12 +39,11 @@ public class Game {
         getPlayers();
 
         getMapMove();
-
+        //scanner.useDelimiter(",");
         moveAndFight();
 
     }
 
-<<<<<<< HEAD
     public void chooseTheBestStrategy(Hero hero) {
         int maxLevelHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
         if (maxLevelHp/3 < hero.getHp() && hero.getHp() < maxLevelHp/2 && hero.getHeroType() == 'K') {
@@ -74,8 +75,6 @@ public class Game {
         }
     }
 
-=======
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     /**
      *  Metoda construieste eroii ce vor lua parte la joc si ii plaseaza pe toti intr-un vector.
      */
@@ -88,7 +87,7 @@ public class Game {
             int x = this.scanner.nextInt();
             int y = this.scanner.nextInt();
             HeroFactory heroFactory = new HeroFactory();
-            heroList[i] = heroFactory.getHero(heroType, x, y, mapLand[x][y]);
+            heroList[i] = heroFactory.getHero(heroType, x, y, map.landType(x, y));
         }
     }
 
@@ -118,18 +117,13 @@ public class Game {
         for (i = 0; i < n; i++) {
             String line = this.scanner.nextLine();
             for (j = 0; j < m; j++) {
-<<<<<<< HEAD
                 //map.buildMap(line.charAt(j), i, j);
                 mapLand[i][j] = line.charAt(j);
             }
         }
         map.buildMap(mapLand);
-=======
-                mapLand[i][j] = line.charAt(j);
-            }
-        }
->>>>>>> 6054d41c3db544ffcffa306e318828583d0ff416
     }
+
 
     /**
      *  Cu ajutorul acestei metode efectuez mutarea jucatorilor la fiecare runda.
@@ -139,8 +133,44 @@ public class Game {
      *  isi vor modifica XP-ul si HP-ul in mod corespunzator.
      */
     private void moveAndFight() {
-        int i, j;
+        int i, j, k;
         for (int round = 0; round < r; round++) {
+            this.numberOfAngels = this.scanner.nextInt();
+            angelsList = new AngelVisitor[numberOfAngels];
+            for (k = 0; k < numberOfAngels; k++) {
+                String angel = this.scanner.next();
+                String[] partsOfAngel = angel.split(",");
+                int x = Integer.parseInt(partsOfAngel[1]);
+                int y = Integer.parseInt(partsOfAngel[2]);
+                AngelsFactory angelsFactory = new AngelsFactory();
+                angelsList[k] = angelsFactory.getAngel(partsOfAngel[0], x, y);
+            }
+
+            if (round != 0) {
+                for (i = 0; i < p; i++) {
+                    if (!heroList[i].isDead()) {
+                        if (heroList[i].getPassiveTurns() != 0) {
+                            heroList[i].receivePassiveDamage();
+                            if (heroList[i].getHp() <= 0) {
+                                heroList[i].setDead();
+                            }
+                        }
+                    }
+                }
+                System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+                for (i = 0; i < p; i++) {
+                    if (heroList[i].getImmobilized() == 0) {
+                        chooseTheBestStrategy(heroList[i]);
+                        if (heroList[i].getStrategy() != null) {
+                            heroList[i].executeStrategy();
+                        }
+                    }
+                }
+                System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+                Knight knight = (Knight) heroList[0];
+                System.out.println(knight.getSlamModifier() + " " + knight.getExecuteModifier());
+            }
+
             for (int indexPlayer = 0; indexPlayer < p; indexPlayer++) {
                 int heroX = heroList[indexPlayer].getX();
                 int heroY = heroList[indexPlayer].getY();
@@ -166,18 +196,18 @@ public class Game {
                 heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
             }
 
-            if (round != 0) {
-                for (i = 0; i < p; i++) {
-                    if (!heroList[i].isDead()) {
-                        if (heroList[i].getPassiveTurns() != 0) {
-                            heroList[i].receivePassiveDamage();
-                            if (heroList[i].getHp() <= 0) {
-                                heroList[i].setDead();
-                            }
-                        }
-                    }
-                }
-            }
+//            if (round != 0) {
+//                for (i = 0; i < p; i++) {
+//                    if (!heroList[i].isDead()) {
+//                        if (heroList[i].getPassiveTurns() != 0) {
+//                            heroList[i].receivePassiveDamage();
+//                            if (heroList[i].getHp() <= 0) {
+//                                heroList[i].setDead();
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
             for (i = 0; i < p - 1; i++) {
                 for (j = i + 1; j < p; j++) {
@@ -196,6 +226,26 @@ public class Game {
                     }
                 }
             }
+
+            for (k = 0; k < numberOfAngels; k++) {
+                for (i = 0; i < p; i++) {
+                    if (!heroList[i].isDead() && heroList[i].getX() == angelsList[k].getX()
+                            && heroList[i].getY() == angelsList[k].getY()) {
+                        heroList[i].receiveAngelPower(angelsList[k]);
+                    }
+                }
+            }
+            //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+//            for (i = 0; i < p; i++) {
+//                if (heroList[i].getImmobilized() == 0) {
+//                    chooseTheBestStrategy(heroList[i]);
+//                    if (heroList[i].getStrategy() != null) {
+//                        heroList[i].executeStrategy();
+//                    }
+//                }
+//            }
+            if (round != 0)
+           System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
         }
     }
 
