@@ -8,7 +8,7 @@ public class Wizard extends Hero implements Fighter {
     private float deflectModifier, drainModifier;
 
     Wizard(final char heroType, final int x, final int y, final char land) {
-        super(heroType, x, y, land);
+        super(heroType, x, y, land, "Wizard");
         super.setInitialHp(hpWizard);
         super.setHpPerLevel(hpPerLevelWizard);
         super.setHp(hpWizard);

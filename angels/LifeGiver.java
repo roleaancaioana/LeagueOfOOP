@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class LifeGiver extends AngelVisitor {
-    LifeGiver(String angelType, int x, int y) {
-        super(angelType, x, y);
+    LifeGiver(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override

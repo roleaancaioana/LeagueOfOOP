@@ -8,10 +8,11 @@ public class Pyromancer extends Hero implements Fighter {
     private float modifier;
 
     Pyromancer(final char heroType, final int x, final int y, final char land) {
-        super(heroType, x, y, land);
+        super(heroType, x, y, land, "Pyromancer");
         super.setInitialHp(hpPyromancer);
         super.setHpPerLevel(hpPerLevelPyromancer);
         super.setHp(hpPyromancer);
+        this.modifier = 0;
     }
 
     @Override
@@ -30,16 +31,18 @@ public class Pyromancer extends Hero implements Fighter {
     public final void attack(final Hero hero) {
         int passiveTurns = 2;
 
-        PyromancerVisitor visitor = new PyromancerVisitor();
-        hero.accept(visitor);
-        modifier = visitor.getModifier();
+        if (this.modifier == 0) {
+            PyromancerVisitor visitor = new PyromancerVisitor();
+            hero.accept(visitor);
+            modifier = visitor.getModifier();
+        }
 
         int intFireblastDamage = getFireblastDamage(modifier);
         int intTotalIgniteBaseDamage = getActiveIgniteDamage(modifier);
         int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage(modifier);
 
         int totalActiveDamage = intFireblastDamage + intTotalIgniteBaseDamage;
-
+        //System.out.println("fireblast:" + intFireblastDamage + "  ignite " + intTotalIgniteBaseDamage);
         hero.setPassiveTurns(passiveTurns);
         hero.setDamage(totalActiveDamage);
         hero.setDamageOvertime(intTotalIgniteDamagePerTurn);
@@ -58,11 +61,14 @@ public class Pyromancer extends Hero implements Fighter {
         final float volcanicModifier = 1.25f;
 
         float fireblastDamage = initialFireblastDamage + fireblastDamagePerLevel * this.getLevel();
-        fireblastDamage *= modifier;
 
         if (this.getLand() == 'V') {
             fireblastDamage *= volcanicModifier;
         }
+
+        fireblastDamage = Math.round(fireblastDamage); //!!!!!!new
+        fireblastDamage *= modifier;
+
         return (Math.round(fireblastDamage));
     }
 
@@ -80,11 +86,14 @@ public class Pyromancer extends Hero implements Fighter {
 
         float totalIgniteBaseDamage = igniteBaseDamage + igniteBaseDamagePerLevel * this.getLevel();
 
-        totalIgniteBaseDamage *= modifier;
-
         if (this.getLand() == 'V') {
             totalIgniteBaseDamage *= volcanicModifier;
         }
+
+        totalIgniteBaseDamage = Math.round(totalIgniteBaseDamage); // !!!!!new
+
+        totalIgniteBaseDamage *= modifier;
+
         return (Math.round(totalIgniteBaseDamage));
     }
 
@@ -102,11 +111,13 @@ public class Pyromancer extends Hero implements Fighter {
         float totalIgniteDamagePerTurn = igniteDamagePerTurn
                 + igniteDamagePerTurnPerLevel * this.getLevel();
 
-        totalIgniteDamagePerTurn *= modifier;
-
         if (this.getLand() == 'V') {
             totalIgniteDamagePerTurn *= volcanicModifier;
         }
+
+        totalIgniteDamagePerTurn = Math.round(totalIgniteDamagePerTurn); //!!!!!!!new
+        totalIgniteDamagePerTurn *= modifier;
+
         return (Math.round(totalIgniteDamagePerTurn));
     }
 

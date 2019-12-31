@@ -3,8 +3,8 @@ package angels;
 import game.*;
 
 public class LevelUpAngel extends AngelVisitor {
-    LevelUpAngel(String angelType, int x, int y) {
-        super(angelType, x, y);
+    LevelUpAngel(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     private void addXpLevelUp(Hero hero) {
@@ -14,6 +14,7 @@ public class LevelUpAngel extends AngelVisitor {
         int xpLevelUp = xpLevelOne + hero.getLevel() * coefficient;
         hero.setXp(xpLevelUp);
         hero.setLevel(hero.getLevel() + 1);
+        hero.setHpLevelUp();
     }
 
     @Override
@@ -29,12 +30,16 @@ public class LevelUpAngel extends AngelVisitor {
     public void angelPower(Knight knight) {
         this.addXpLevelUp(knight);
         final float angelDamageModifier = 0.1f;
+        float newSlamModifier, newExecuteModifier;
 
-        float newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
-        float newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
-
-        knight.setExecuteModifier(newExecuteModifier);
-        knight.setSlamModifier(newSlamModifier);
+        if (!knight.isSlamModifierisInitialZero()) {
+            newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
+            knight.setSlamModifier(newSlamModifier);
+        }
+        if (!knight.isExecuteModifierIsInitialZero()) {
+            newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
+            knight.setExecuteModifier(newExecuteModifier);
+        }
     }
 
     @Override

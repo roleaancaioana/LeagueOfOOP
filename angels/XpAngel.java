@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class XpAngel extends AngelVisitor {
-    XpAngel(String angelType, int x, int y) {
-        super(angelType, x, y);
+    XpAngel(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override

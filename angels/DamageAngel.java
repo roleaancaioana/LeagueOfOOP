@@ -6,13 +6,14 @@ import game.Rogue;
 import game.Wizard;
 
 public class DamageAngel extends AngelVisitor {
-    DamageAngel(String angelType, int x, int y) {
-        super(angelType, x, y);
+    DamageAngel(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override
     public final void angelPower(Pyromancer pyromancer) {
         final float angelPyromancerModifier = 0.2f;
+
         float newModifier = pyromancer.getModifier() + angelPyromancerModifier;
         pyromancer.setModifier(newModifier);
     }
@@ -20,12 +21,16 @@ public class DamageAngel extends AngelVisitor {
     @Override
     public final void angelPower(Knight knight) {
         final float angelKnightModifier = 0.15f;
+        float newSlamModifier, newExecuteModifier;
 
-        float newSlamModifier = knight.getSlamModifier() + angelKnightModifier;
-        float newExecuteModifier = knight.getExecuteModifier() + angelKnightModifier;
-
-        knight.setExecuteModifier(newExecuteModifier);
-        knight.setSlamModifier(newSlamModifier);
+        if (!knight.isSlamModifierisInitialZero()) {
+            newSlamModifier = knight.getSlamModifier() + angelKnightModifier;
+            knight.setSlamModifier(newSlamModifier);
+        }
+        if (!knight.isExecuteModifierIsInitialZero()) {
+            newExecuteModifier = knight.getExecuteModifier() + angelKnightModifier;
+            knight.setExecuteModifier(newExecuteModifier);
+        }
     }
 
     @Override

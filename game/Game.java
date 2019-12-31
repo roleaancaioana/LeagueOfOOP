@@ -134,7 +134,9 @@ public class Game {
      */
     private void moveAndFight() {
         int i, j, k;
+        StringBuilder output = new StringBuilder();
         for (int round = 0; round < r; round++) {
+            this.writer.println("~~ Round " + (round+1) + " ~~");
             this.numberOfAngels = this.scanner.nextInt();
             angelsList = new AngelVisitor[numberOfAngels];
             for (k = 0; k < numberOfAngels; k++) {
@@ -157,7 +159,7 @@ public class Game {
                         }
                     }
                 }
-                System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+                //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
                 for (i = 0; i < p; i++) {
                     if (heroList[i].getImmobilized() == 0) {
                         chooseTheBestStrategy(heroList[i]);
@@ -166,9 +168,9 @@ public class Game {
                         }
                     }
                 }
-                System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
-                Knight knight = (Knight) heroList[0];
-                System.out.println(knight.getSlamModifier() + " " + knight.getExecuteModifier());
+                //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+//                Knight knight = (Knight) heroList[0];
+//                System.out.println(knight.getSlamModifier() + " " + knight.getExecuteModifier());
             }
 
             for (int indexPlayer = 0; indexPlayer < p; indexPlayer++) {
@@ -196,19 +198,6 @@ public class Game {
                 heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
             }
 
-//            if (round != 0) {
-//                for (i = 0; i < p; i++) {
-//                    if (!heroList[i].isDead()) {
-//                        if (heroList[i].getPassiveTurns() != 0) {
-//                            heroList[i].receivePassiveDamage();
-//                            if (heroList[i].getHp() <= 0) {
-//                                heroList[i].setDead();
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
             for (i = 0; i < p - 1; i++) {
                 for (j = i + 1; j < p; j++) {
                     if (!heroList[i].isDead() && !heroList[j].isDead()
@@ -217,35 +206,37 @@ public class Game {
                         heroList[i].attack(heroList[j]);
                         heroList[j].attack(heroList[i]);
 
-                        if (heroList[i].isDead()) {
-                            heroList[j].afterFightEffects(heroList[i].getLevel());
-                        }
                         if (heroList[j].isDead()) {
+                            this.writer.println("Player " + heroList[j].getName() + " " + j + " was killed by " + heroList[i].getName() + " " + i);
                             heroList[i].afterFightEffects(heroList[j].getLevel());
+                        }
+                        if (heroList[i].isDead()) {
+                            this.writer.println("Player " + heroList[i].getName() + " " + i + " was killed by " + heroList[j].getName() + " " + j);
+                            heroList[j].afterFightEffects(heroList[i].getLevel());
                         }
                     }
                 }
             }
-
+            //System.out.println(angelsList[0].getName());
             for (k = 0; k < numberOfAngels; k++) {
+                this.writer.println("Angel " + angelsList[k].getName() + " was spawned at " + angelsList[k].getX() + " " + angelsList[k].getY());
                 for (i = 0; i < p; i++) {
                     if (!heroList[i].isDead() && heroList[i].getX() == angelsList[k].getX()
                             && heroList[i].getY() == angelsList[k].getY()) {
                         heroList[i].receiveAngelPower(angelsList[k]);
+                        String verb;
+                        if (angelsList[k].getAngelType().equals("good")) {
+                            verb = "helped ";
+                        } else {
+                            verb = "hit ";
+                        }
+                        this.writer.println(angelsList[k].getName() + " " + verb + heroList[i].getName() + " " + i);
                     }
                 }
             }
             //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
-//            for (i = 0; i < p; i++) {
-//                if (heroList[i].getImmobilized() == 0) {
-//                    chooseTheBestStrategy(heroList[i]);
-//                    if (heroList[i].getStrategy() != null) {
-//                        heroList[i].executeStrategy();
-//                    }
-//                }
-//            }
-            if (round != 0)
-           System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+            System.out.println(heroList[1].getHp() + " " + heroList[1].getXp());
+            this.writer.println("");
         }
     }
 
@@ -253,6 +244,7 @@ public class Game {
      * Aceasta metoda ma va ajuta la formarea output-ului cerut.
      */
     public void printPlayers() {
+        this.writer.println("~~ Results ~~");
         for (int i = 0; i < p; i++) {
             StringBuilder output = new StringBuilder();
             if (heroList[i] instanceof Pyromancer) {

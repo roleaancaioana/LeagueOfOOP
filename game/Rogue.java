@@ -17,7 +17,7 @@ public class Rogue extends Hero implements Fighter {
     private float paralysisModifier, backstabModifier;
 
     Rogue(final char heroType, final int x, final int y, final char land) {
-        super(heroType, x, y, land);
+        super(heroType, x, y, land, "Rogue");
         super.setInitialHp(hpRogue);
         super.setHpPerLevel(hpPerLevelRogue);
         super.setHp(hpRogue);

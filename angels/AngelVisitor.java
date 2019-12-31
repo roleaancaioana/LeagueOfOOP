@@ -6,13 +6,22 @@ import game.Rogue;
 import game.Wizard;
 
 public abstract class AngelVisitor {
-    private String angelType;
+    private String name, angelType;
     private int x, y;
 
-    AngelVisitor(String angelType, int x, int y) {
-        this.angelType = angelType;
+    AngelVisitor(String name, String angelType, int x, int y) {
+        this.name = name;
         this.x = x;
         this.y = y;
+        this.angelType = angelType;
+    }
+
+    public String getAngelType() {
+        return angelType;
+    }
+
+    public void setAngelType(String angelType) {
+        this.angelType = angelType;
     }
 
     public int getY() {
@@ -31,12 +40,12 @@ public abstract class AngelVisitor {
         this.x = x;
     }
 
-    public String getAngelType() {
-        return angelType;
+    public String getName() {
+        return name;
     }
 
-    public void setAngelType(String angelType) {
-        this.angelType = angelType;
+    public void setName(String angelType) {
+        this.name = angelType;
     }
 
     public abstract void angelPower(Pyromancer pyromancer);

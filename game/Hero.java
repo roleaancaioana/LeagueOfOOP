@@ -9,12 +9,13 @@ public abstract class Hero {
     private int damage;
     private int damageOvertime;
     private boolean dead;
+    private String name;
     private int passiveTurns;
     private int immobilized;
     private char heroType;
     private Strategy strategy;
 
-    Hero(final char heroType, final int x, final int y, final char land) {
+    Hero(final char heroType, final int x, final int y, final char land, String name) {
         this.xp = 0;
         this.level = 0;
         this.x = x;
@@ -26,6 +27,11 @@ public abstract class Hero {
         this.passiveTurns = 0;
         this.heroType = heroType;
         this.strategy = null;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setStrategy(Strategy strategy) {
@@ -148,7 +154,7 @@ public abstract class Hero {
      * Aceasta metoda ma va ajuta sa modific nivelul unui erou la finalul
      * unei lupte in care acesta a fost implicat.
      */
-    private void levelUp() {
+    public void levelUp() {
         final int xpLevelOne = 250;
         final int coefficient = 50;
         int xpLevelUp = xpLevelOne + this.level * coefficient;
@@ -208,6 +214,10 @@ public abstract class Hero {
     final void afterFightEffects(final int heroLevel) {
         getXpWinner(heroLevel);
         levelUp();
+    }
+
+    public void setHpLevelUp() {
+        this.hp = initialHp + hpPerLevel * this.level;
     }
 
     public abstract void attack(Hero hero);

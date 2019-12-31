@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class Dracula extends AngelVisitor {
-    Dracula(String angelType, int x, int y) {
-        super(angelType, x, y);
+    Dracula(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override
@@ -24,12 +24,16 @@ public class Dracula extends AngelVisitor {
     @Override
     public final void angelPower(Knight knight) {
         final float angelDamageModifier = 0.2f;
+        float newSlamModifier, newExecuteModifier;
 
-        float newSlamModifier = knight.getSlamModifier() - angelDamageModifier;
-        float newExecuteModifier = knight.getExecuteModifier() - angelDamageModifier;
-
-        knight.setExecuteModifier(newExecuteModifier);
-        knight.setSlamModifier(newSlamModifier);
+        if (!knight.isSlamModifierisInitialZero()) {
+            newSlamModifier = knight.getSlamModifier() - angelDamageModifier;
+            knight.setSlamModifier(newSlamModifier);
+        }
+        if (!knight.isExecuteModifierIsInitialZero()) {
+            newExecuteModifier = knight.getExecuteModifier() - angelDamageModifier;
+            knight.setExecuteModifier(newExecuteModifier);
+        }
 
         final int angelHpModifier = 60;
         int newHp = knight.getHp() - angelHpModifier;

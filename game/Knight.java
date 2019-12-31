@@ -9,17 +9,20 @@ public class Knight extends Hero implements Fighter {
     private final float slamBaseDamagePerLevel = 40;
     private final float hpLimitCoefficient = 0.2f;
     private final float maxHpLimit = 0.6f;
-    private final float hundreadPercentage = 0.001f;
+    private final float hundreadPercentage = 0.01f;
     private final float landModifier = 1.15f;
     private final int hpKnight = 900;
     private final int hpPerLevelKnight = 80;
-    float executeModifier, slamModifier;
+    private float executeModifier, slamModifier;
+    private boolean executeModifierIsInitialZero, slamModifierisInitialZero = false;
 
     Knight(final char heroType, final int x, final int y, final char land) {
-        super(heroType, x, y, land);
+        super(heroType, x, y, land, "Knight");
         super.setInitialHp(hpKnight);
         super.setHpPerLevel(hpPerLevelKnight);
         super.setHp(hpKnight);
+        this.executeModifier = 0;
+        this.slamModifier = 0;
     }
 
     @Override
@@ -40,10 +43,21 @@ public class Knight extends Hero implements Fighter {
         float executeDamage, slamDamage;
         int roundsImobilised = 1;
 
-        KnightVisitor visitor = new KnightVisitor();
-        hero.accept(visitor);
-        executeModifier = visitor.getExecuteModifier();
-        slamModifier = visitor.getSlamModifier();
+        /*
+        Trebuie sa pun conditia asta ca sa nu am probleme atunci cand aplic o strategie.
+         */
+        if (executeModifier == 0 && slamModifier == 0) {
+            KnightVisitor visitor = new KnightVisitor();
+            hero.accept(visitor);
+            executeModifier = visitor.getExecuteModifier();
+            slamModifier = visitor.getSlamModifier();
+            if (executeModifier == 1.0f) {
+                executeModifierIsInitialZero = true;
+            }
+            if (slamModifier == 1.0f) {
+                slamModifierisInitialZero = true;
+            }
+        }
 
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
         float hpLimit = hpLimitCoefficient * maxHp;
@@ -63,12 +77,14 @@ public class Knight extends Hero implements Fighter {
              */
             executeDamage = executeBaseDamage + executeBaseDamagePerLevel * this.getLevel();
             executeDamage *= executeModifier;
+            executeDamage = Math.round(executeDamage); // new!!!!!!
 
             /*
             Calculez damage-ul dat de abilitatea slam.
              */
             slamDamage = slamBaseDamage + slamBaseDamagePerLevel * this.getLevel();
             slamDamage *= slamModifier;
+            slamDamage = Math.round(slamDamage); // new!!!!!!!
 
             /*
             Aplic amplificatorul corespunzator terenului Land.
@@ -82,6 +98,7 @@ public class Knight extends Hero implements Fighter {
         int intExecuteDamage = Math.round(executeDamage);
         int intSlamDamage = Math.round(slamDamage);
         int totalDamage = intExecuteDamage + intSlamDamage;
+        //System.out.println("execute:" + executeModifier + " slam:" + slamModifier);
 
         hero.becomeImmobilized(roundsImobilised);
         hero.setDamage(totalDamage);
@@ -150,5 +167,13 @@ public class Knight extends Hero implements Fighter {
     @Override
     public void receiveAngelPower(AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
+    }
+
+    public boolean isExecuteModifierIsInitialZero() {
+        return executeModifierIsInitialZero;
+    }
+
+    public boolean isSlamModifierisInitialZero() {
+        return slamModifierisInitialZero;
     }
 }

@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class SmallAngel extends AngelVisitor {
-    SmallAngel(String angelType, int x, int y) {
-        super(angelType, x, y);
+    SmallAngel(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override
@@ -24,12 +24,16 @@ public class SmallAngel extends AngelVisitor {
     @Override
     public void angelPower(Knight knight) {
         final float angelDamageModifier = 0.1f;
+        float newSlamModifier, newExecuteModifier;
 
-        float newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
-        float newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
-
-        knight.setExecuteModifier(newExecuteModifier);
-        knight.setSlamModifier(newSlamModifier);
+        if (!knight.isSlamModifierisInitialZero()) {
+            newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
+            knight.setSlamModifier(newSlamModifier);
+        }
+        if (!knight.isExecuteModifierIsInitialZero()) {
+            newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
+            knight.setExecuteModifier(newExecuteModifier);
+        }
 
         final int angelHpModifier = 10;
         int newHp = knight.getHp() + angelHpModifier;

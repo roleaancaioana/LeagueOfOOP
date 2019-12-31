@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class Spawner extends AngelVisitor {
-    Spawner(String angelType, int x, int y) {
-        super(angelType, x, y);
+    Spawner(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override

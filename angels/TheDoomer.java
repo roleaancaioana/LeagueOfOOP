@@ -6,8 +6,8 @@ import game.Rogue;
 import game.Wizard;
 
 public class TheDoomer extends AngelVisitor {
-    TheDoomer(String angelType, int x, int y) {
-        super(angelType, x, y);
+    TheDoomer(String name, String angelType, int x, int y) {
+        super(name, angelType, x, y);
     }
 
     @Override
