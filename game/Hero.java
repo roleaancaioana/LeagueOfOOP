@@ -30,7 +30,6 @@ public abstract class Hero {
         this.name = name;
     }
 
-
     public String getName() {
         return name;
     }
@@ -69,7 +68,7 @@ public abstract class Hero {
         return initialHp;
     }
 
-    final int getPassiveTurns() {
+    public final int getPassiveTurns() {
         return passiveTurns;
     }
 
@@ -207,6 +206,15 @@ public abstract class Hero {
         }
     }
 
+    final void moveOutsideTheMap (final int newX, final int newY) {
+        if (this.immobilized == 0) {
+            this.x = newX;
+            this.y = newY;
+        }
+        if (this.immobilized != 0) {
+            this.immobilized--;
+        }
+    }
     /**
      * Aceasta metoda ma va ajuta sa-i modific eroului care a fost implicat intr-o lupta
      * XP-ul si nivelul.

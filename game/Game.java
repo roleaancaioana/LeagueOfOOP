@@ -46,6 +46,7 @@ public class Game {
 
     public void chooseTheBestStrategy(Hero hero) {
         int maxLevelHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
+        hero.setStrategy(null);
         if (maxLevelHp/3 < hero.getHp() && hero.getHp() < maxLevelHp/2 && hero.getHeroType() == 'K') {
             hero.setStrategy(new FirstKnightStrategy());
         }
@@ -70,6 +71,7 @@ public class Game {
         if (maxLevelHp/4 < hero.getHp() && hero.getHp() < maxLevelHp/2 && hero.getHeroType() == 'W') {
             hero.setStrategy(new FirstWizardStrategy());
         }
+
         if (hero.getHp() < maxLevelHp/4 && hero.getHeroType() == 'W') {
             hero.setStrategy(new SecondWizardStrategy());
         }
@@ -124,7 +126,6 @@ public class Game {
         map.buildMap(mapLand);
     }
 
-
     /**
      *  Cu ajutorul acestei metode efectuez mutarea jucatorilor la fiecare runda.
      *  Le voi aplica apoi jucatorilor damage-ul primit de la abilitatile overtime.
@@ -169,14 +170,20 @@ public class Game {
                         }
                     }
                 }
-                //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
+                if (round == 13) {
+                    System.out.println(heroList[5].getName() + " 5 are hp-ul" + heroList[5].getHp());
+                }
+
                 for (i = 0; i < p; i++) {
                     if (heroList[i].getImmobilized() == 0) {
                         chooseTheBestStrategy(heroList[i]);
                         if (heroList[i].getStrategy() != null) {
+                            if (round == 13 && i == 5) {
+                                System.out.println(heroList[5].getName() + "5 aplica strategia" + heroList[5].getHp());
+                            }
                             heroList[i].executeStrategy();
-                            if (round == 7) {
-                                System.out.println(heroList[i].getName() + i + " aplica strategia");
+                            if (round == 13 && i == 5) {
+                                System.out.println(heroList[5].getName() + "are un nou hp" + heroList[5].getHp());
                             }
                         }
                     }
@@ -208,7 +215,11 @@ public class Game {
                             break;
                     }
                 }
-                heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
+                if (heroX >= 0 && heroY >= 0) {
+                    heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
+                } else {
+                    heroList[indexPlayer].moveOutsideTheMap(heroX, heroY);
+                }
             }
 
 //            System.out.println("=============================================");
@@ -216,6 +227,7 @@ public class Game {
 //                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
 //            }
 //            System.out.println("==============================================");
+
             for (i = 0; i < p - 1; i++) {
                 for (j = i + 1; j < p; j++) {
                     if (!heroList[i].isDead() && !heroList[j].isDead()
@@ -223,11 +235,22 @@ public class Game {
                             && heroList[i].getY() == heroList[j].getY()) {
                         int currentLevel1 = heroList[i].getLevel();
                         int currentLevel2 = heroList[j].getLevel();
+                        if (round == 14) {
+//                            Wizard w1 = (Wizard) heroList[i];
+//                            Wizard w2 = (Wizard) heroList[j];
+                            System.out.println("FII ATENT AICI!!!!!!!!!!!!");
+                            //System.out.println(heroList[4].getHp());
+                            System.out.println(heroList[i].getName() + i + " se bate cu " + heroList[j].getName() + j);
+//                            System.out.println("Drain:" + i + w1.drainWizardModifier);
+//                            System.out.println("Drain:" + j + w2.drainWizardModifier);
+                        }
                         heroList[i].attack(heroList[j]);
                         heroList[j].attack(heroList[i]);
-                        if (round == 7) {
-                            System.out.println(heroList[i].getName() + i+ " se bate cu " + heroList[j].getName()+j);
+                        if (round == 14) {
+                            System.out.println("FII ATENT AICI!!!!!!!!!!!!");
+                            System.out.println(heroList[4].getHp());
                         }
+
                         if (heroList[j].isDead() && !heroList[i].isDead()) {
                             this.writer.println("Player " + heroList[j].getName() + " " + j + " was killed by " + heroList[i].getName() + " " + i);
                             heroList[i].afterFightEffects(heroList[j].getLevel());
@@ -254,6 +277,7 @@ public class Game {
                     }
                 }
             }
+
 //            System.out.println("=============================================");
 //            for (i = 0; i < p; i++) {
 //                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
@@ -299,6 +323,7 @@ public class Game {
                     }
                 }
             }
+
             //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
 //            System.out.println("=============================================");
 //            for (i = 0; i < p; i++) {

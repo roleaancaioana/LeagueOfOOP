@@ -7,7 +7,7 @@ public class Wizard extends Hero implements Fighter {
     private final int hpPerLevelWizard = 30;
     private float deflectModifier, drainModifier;
     private float deflectRogueModifier, drainRogueModifier;
-    private float drainWizardModifier;
+    public float drainWizardModifier;
     private float deflectKnightModifier, drainKnightModifier;
     private float deflectPyromancerModifier, drainPyromancerModifier;
 
