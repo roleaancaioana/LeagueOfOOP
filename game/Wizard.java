@@ -6,12 +6,23 @@ public class Wizard extends Hero implements Fighter {
     private final int hpWizard = 400;
     private final int hpPerLevelWizard = 30;
     private float deflectModifier, drainModifier;
+    private float deflectRogueModifier, drainRogueModifier;
+    private float drainWizardModifier;
+    private float deflectKnightModifier, drainKnightModifier;
+    private float deflectPyromancerModifier, drainPyromancerModifier;
 
     Wizard(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land, "Wizard");
         super.setInitialHp(hpWizard);
         super.setHpPerLevel(hpPerLevelWizard);
         super.setHp(hpWizard);
+        this.drainRogueModifier = 0.8f;
+        this.deflectRogueModifier = 1.2f;
+        this.deflectKnightModifier = 1.4f;
+        this.drainKnightModifier = 1.2f;
+        this.deflectPyromancerModifier = 1.3f;
+        this.drainPyromancerModifier = 0.9f;
+        this.drainWizardModifier = 1.05f;
     }
 
     @Override
@@ -19,8 +30,24 @@ public class Wizard extends Hero implements Fighter {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
-        this.deflectModifier = strategy.changeDamage(this.deflectModifier);
-        this.drainModifier = strategy.changeDamage(this.drainModifier);
+        this.drainRogueModifier = strategy.changeDamage(this.drainRogueModifier);
+        this.deflectRogueModifier = strategy.changeDamage(this.deflectRogueModifier);
+        this.deflectKnightModifier = strategy.changeDamage(this.deflectKnightModifier);
+        this.drainKnightModifier = strategy.changeDamage(this.drainKnightModifier);
+        this.deflectPyromancerModifier = strategy.changeDamage(this.deflectPyromancerModifier);
+        this.drainPyromancerModifier = strategy.changeDamage(this.drainPyromancerModifier);
+        this.drainWizardModifier = strategy.changeDamage(this.drainWizardModifier);
+    }
+
+    @Override
+    public void changeAllModifiers(float change) {
+        this.drainRogueModifier += change;
+        this.deflectRogueModifier += change;
+        this.deflectKnightModifier += change;
+        this.drainKnightModifier += change;
+        this.deflectPyromancerModifier += change;
+        this.drainPyromancerModifier += change;
+        this.drainWizardModifier += change;
     }
 
     /**
@@ -29,8 +56,23 @@ public class Wizard extends Hero implements Fighter {
      */
     @Override
     public final void attack(final Hero hero) {
-        int intDrainDamage = getDrainDamage(hero);
+        if (hero instanceof Rogue) {
+            this.drainModifier = drainRogueModifier;
+            this.deflectModifier = deflectRogueModifier;
+        }
+        if (hero instanceof Wizard) {
+            this.drainModifier = drainWizardModifier;
+        }
+        if (hero instanceof Pyromancer) {
+            this.drainModifier = drainPyromancerModifier;
+            this.deflectModifier = deflectPyromancerModifier;
+        }
+        if (hero instanceof Knight) {
+            this.drainModifier = drainKnightModifier;
+            this.deflectModifier = deflectKnightModifier;
+        }
 
+        int intDrainDamage = getDrainDamage(hero);
         int intDeflectDamage = getDeflectDamage(hero);
         int totalActiveDamage = intDeflectDamage + intDrainDamage;
 
@@ -50,10 +92,6 @@ public class Wizard extends Hero implements Fighter {
         final float perLevelDrainPercentage = 0.05f;
         final float desertModifier = 1.1f;
 
-        WizardVisitor visitor = new WizardVisitor();
-        hero.accept(visitor);
-        drainModifier = visitor.getDrainModifier();
-
         float drainPercentage = initialDrainPercentage + perLevelDrainPercentage * this.getLevel();
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
         float baseHp = Math.min(coefficient * maxHp,
@@ -65,7 +103,6 @@ public class Wizard extends Hero implements Fighter {
         drainPercentage *= drainModifier;
 
         float drainDamage = drainPercentage * baseHp;
-
         /*
          Aplic amplificatorul corespunzator terenului Desert.
         */
@@ -89,10 +126,6 @@ public class Wizard extends Hero implements Fighter {
         final float maxPercentage = 0.7f;
         int damageWithoutRaceModifiers = 0;
 
-        WizardVisitor visitor = new WizardVisitor();
-        hero.accept(visitor);
-        deflectModifier = visitor.getDeflectModifier();
-
         float deflectPercentage = initialDeflectPercentage
                 + this.getLevel() * perLevelDeflectPercentage;
         if (deflectPercentage > maxPercentage) {
@@ -110,7 +143,6 @@ public class Wizard extends Hero implements Fighter {
         }
 
         float deflectDamage = damageWithoutRaceModifiers * deflectPercentage;
-
         /*
          Aplic amplificatorul de rasa.
          */

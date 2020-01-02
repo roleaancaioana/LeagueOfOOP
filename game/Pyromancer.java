@@ -6,6 +6,10 @@ public class Pyromancer extends Hero implements Fighter {
     private final int hpPyromancer = 500;
     private final int hpPerLevelPyromancer = 50;
     private float modifier;
+    private float rogueModifier;
+    private float knightModifier;
+    private float pyromancerModifier;
+    private float wizardModifier;
 
     Pyromancer(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land, "Pyromancer");
@@ -13,6 +17,10 @@ public class Pyromancer extends Hero implements Fighter {
         super.setHpPerLevel(hpPerLevelPyromancer);
         super.setHp(hpPyromancer);
         this.modifier = 0;
+        this.pyromancerModifier = 0.9f;
+        this.wizardModifier = 1.05f;
+        this.rogueModifier = 0.8f;
+        this.knightModifier = 1.2f;
     }
 
     @Override
@@ -20,7 +28,18 @@ public class Pyromancer extends Hero implements Fighter {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
-        this.modifier = strategy.changeDamage(this.modifier);
+        this.rogueModifier = strategy.changeDamage(this.rogueModifier);
+        this.pyromancerModifier = strategy.changeDamage(this.pyromancerModifier);
+        this.wizardModifier = strategy.changeDamage(this.wizardModifier);
+        this.knightModifier = strategy.changeDamage(this.knightModifier);
+    }
+
+    @Override
+    public void changeAllModifiers(float change) {
+        rogueModifier += change;
+        knightModifier += change;
+        wizardModifier += change;
+        pyromancerModifier += change;
     }
 
     /**
@@ -31,10 +50,17 @@ public class Pyromancer extends Hero implements Fighter {
     public final void attack(final Hero hero) {
         int passiveTurns = 2;
 
-        if (this.modifier == 0) {
-            PyromancerVisitor visitor = new PyromancerVisitor();
-            hero.accept(visitor);
-            modifier = visitor.getModifier();
+        if (hero instanceof Pyromancer) {
+            this.modifier = pyromancerModifier;
+        }
+        if (hero instanceof Rogue) {
+            this.modifier = rogueModifier;
+        }
+        if (hero instanceof Knight) {
+            this.modifier = knightModifier;
+        }
+        if (hero instanceof Wizard) {
+            this.modifier = wizardModifier;
         }
 
         int intFireblastDamage = getFireblastDamage(modifier);
@@ -42,7 +68,7 @@ public class Pyromancer extends Hero implements Fighter {
         int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage(modifier);
 
         int totalActiveDamage = intFireblastDamage + intTotalIgniteBaseDamage;
-        //System.out.println("fireblast:" + intFireblastDamage + "  ignite " + intTotalIgniteBaseDamage);
+
         hero.setPassiveTurns(passiveTurns);
         hero.setDamage(totalActiveDamage);
         hero.setDamageOvertime(intTotalIgniteDamagePerTurn);

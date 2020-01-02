@@ -21,48 +21,27 @@ public class LevelUpAngel extends AngelVisitor {
     public void angelPower(Pyromancer pyromancer) {
         this.addXpLevelUp(pyromancer);
         final float angelDamageModifier = 0.2f;
-
-        float newModifier = pyromancer.getModifier() + angelDamageModifier;
-        pyromancer.setModifier(newModifier);
+        pyromancer.changeAllModifiers(angelDamageModifier);
     }
 
     @Override
     public void angelPower(Knight knight) {
         this.addXpLevelUp(knight);
         final float angelDamageModifier = 0.1f;
-        float newSlamModifier, newExecuteModifier;
-
-        if (!knight.isSlamModifierisInitialZero()) {
-            newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
-            knight.setSlamModifier(newSlamModifier);
-        }
-        if (!knight.isExecuteModifierIsInitialZero()) {
-            newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
-            knight.setExecuteModifier(newExecuteModifier);
-        }
+        knight.changeAllModifiers(angelDamageModifier);
     }
 
     @Override
     public void angelPower(Rogue rogue) {
         this.addXpLevelUp(rogue);
         final float angelDamageModifier = 0.15f;
-
-        float newBackstabModifier = rogue.getBackstabModifier() + angelDamageModifier;
-        float newParalysisModifier = rogue.getParalysisModifier() + angelDamageModifier;
-
-        rogue.setBackstabModifier(newBackstabModifier);
-        rogue.setParalysisModifier(newParalysisModifier);
+        rogue.changeAllModifiers(angelDamageModifier);
     }
 
     @Override
     public void angelPower(Wizard wizard) {
         this.addXpLevelUp(wizard);
         final float angelDamageModifier = 0.25f;
-
-        float newDrainModifier = wizard.getDrainModifier() + angelDamageModifier;
-        float newDeflectModifier = wizard.getDeflectModifier() + angelDamageModifier;
-
-        wizard.setDrainModifier(newDrainModifier);
-        wizard.setDeflectModifier(newDeflectModifier);
+        wizard.changeAllModifiers(angelDamageModifier);
     }
 }

@@ -13,8 +13,7 @@ public class SmallAngel extends AngelVisitor {
     @Override
     public void angelPower(Pyromancer pyromancer) {
         final float angelDamageModifier = 0.15f;
-        float newModifier = pyromancer.getModifier() + angelDamageModifier;
-        pyromancer.setModifier(newModifier);
+        pyromancer.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 15;
         int newHp = pyromancer.getHp() + angelHpModifier;
@@ -24,16 +23,7 @@ public class SmallAngel extends AngelVisitor {
     @Override
     public void angelPower(Knight knight) {
         final float angelDamageModifier = 0.1f;
-        float newSlamModifier, newExecuteModifier;
-
-        if (!knight.isSlamModifierisInitialZero()) {
-            newSlamModifier = knight.getSlamModifier() + angelDamageModifier;
-            knight.setSlamModifier(newSlamModifier);
-        }
-        if (!knight.isExecuteModifierIsInitialZero()) {
-            newExecuteModifier = knight.getExecuteModifier() + angelDamageModifier;
-            knight.setExecuteModifier(newExecuteModifier);
-        }
+        knight.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 10;
         int newHp = knight.getHp() + angelHpModifier;
@@ -43,12 +33,7 @@ public class SmallAngel extends AngelVisitor {
     @Override
     public void angelPower(Rogue rogue) {
         final float angelDamageModifier = 0.05f;
-
-        float newBackstabModifier = rogue.getBackstabModifier() + angelDamageModifier;
-        float newParalysisModifier = rogue.getParalysisModifier() + angelDamageModifier;
-
-        rogue.setBackstabModifier(newBackstabModifier);
-        rogue.setParalysisModifier(newParalysisModifier);
+        rogue.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 20;
         int newHp = rogue.getHp() + angelHpModifier;
@@ -58,12 +43,7 @@ public class SmallAngel extends AngelVisitor {
     @Override
     public void angelPower(Wizard wizard) {
         final float angelDamageModifier = 0.1f;
-
-        float newDrainModifier = wizard.getDrainModifier() + angelDamageModifier;
-        float newDeflectModifier = wizard.getDeflectModifier() + angelDamageModifier;
-
-        wizard.setDrainModifier(newDrainModifier);
-        wizard.setDeflectModifier(newDeflectModifier);
+        wizard.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 25;
         int newHp = wizard.getHp() + angelHpModifier;

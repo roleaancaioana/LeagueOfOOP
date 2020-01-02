@@ -8,7 +8,7 @@ public abstract class Hero {
     private char land;
     private int damage;
     private int damageOvertime;
-    private boolean dead;
+    public boolean dead;
     private String name;
     private int passiveTurns;
     private int immobilized;
@@ -29,6 +29,7 @@ public abstract class Hero {
         this.strategy = null;
         this.name = name;
     }
+
 
     public String getName() {
         return name;
@@ -64,7 +65,7 @@ public abstract class Hero {
         return land;
     }
 
-    final int getInitialHp() {
+    public final int getInitialHp() {
         return initialHp;
     }
 
@@ -101,7 +102,7 @@ public abstract class Hero {
         return xp;
     }
 
-    final int getHpPerLevel() {
+    public final int getHpPerLevel() {
         return hpPerLevel;
     }
 
@@ -109,7 +110,7 @@ public abstract class Hero {
         this.hpPerLevel = hpPerLevel;
     }
 
-    final boolean isDead() {
+    public final boolean isDead() {
         return dead;
     }
 
@@ -158,11 +159,11 @@ public abstract class Hero {
         final int xpLevelOne = 250;
         final int coefficient = 50;
         int xpLevelUp = xpLevelOne + this.level * coefficient;
-        if (this.xp > xpLevelUp) { // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! >=?
+        if (this.xp >= xpLevelUp) { // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! >=?
             int levelCurrent = this.level;
             this.level = ((this.xp - xpLevelOne) / coefficient) + 1;
             if (levelCurrent != this.level) {
-                this.hp = initialHp + hpPerLevel * (this.level - levelCurrent);
+                this.hp = initialHp + hpPerLevel * this.level;
             }
         }
     }
@@ -225,4 +226,5 @@ public abstract class Hero {
     public abstract void accept(FighterVisitor visitor);
 
     public abstract void receiveAngelPower(AngelVisitor angelVisitor);
+    public abstract void changeAllModifiers(float change);
 }

@@ -147,7 +147,17 @@ public class Game {
                 AngelsFactory angelsFactory = new AngelsFactory();
                 angelsList[k] = angelsFactory.getAngel(partsOfAngel[0], x, y);
             }
-
+            System.out.println("~~ Round " + (round+1) + " ~~");
+            for (i = 0; i < p; i++) {
+                if (heroList[i].getName().equals("Wizard")) {
+                    System.out.println(heroList[i].getName() + i + " " + heroList[i].getHp());
+                }
+            }
+            System.out.println("=============================================");
+//            for (i = 0; i < p; i++) {
+//                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
+//            }
+//            System.out.println("==============================================");
             if (round != 0) {
                 for (i = 0; i < p; i++) {
                     if (!heroList[i].isDead()) {
@@ -165,6 +175,9 @@ public class Game {
                         chooseTheBestStrategy(heroList[i]);
                         if (heroList[i].getStrategy() != null) {
                             heroList[i].executeStrategy();
+                            if (round == 7) {
+                                System.out.println(heroList[i].getName() + i + " aplica strategia");
+                            }
                         }
                     }
                 }
@@ -198,44 +211,100 @@ public class Game {
                 heroList[indexPlayer].move(heroX, heroY, mapLand[heroX][heroY]);
             }
 
+//            System.out.println("=============================================");
+//            for (i = 0; i < p; i++) {
+//                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
+//            }
+//            System.out.println("==============================================");
             for (i = 0; i < p - 1; i++) {
                 for (j = i + 1; j < p; j++) {
                     if (!heroList[i].isDead() && !heroList[j].isDead()
                             && heroList[i].getX() == heroList[j].getX()
                             && heroList[i].getY() == heroList[j].getY()) {
+                        int currentLevel1 = heroList[i].getLevel();
+                        int currentLevel2 = heroList[j].getLevel();
                         heroList[i].attack(heroList[j]);
                         heroList[j].attack(heroList[i]);
-
-                        if (heroList[j].isDead()) {
+                        if (round == 7) {
+                            System.out.println(heroList[i].getName() + i+ " se bate cu " + heroList[j].getName()+j);
+                        }
+                        if (heroList[j].isDead() && !heroList[i].isDead()) {
                             this.writer.println("Player " + heroList[j].getName() + " " + j + " was killed by " + heroList[i].getName() + " " + i);
                             heroList[i].afterFightEffects(heroList[j].getLevel());
+                            if (currentLevel1 != heroList[i].getLevel()) {
+                                for (int level = currentLevel1 + 1; level <= heroList[i].getLevel(); level++) {
+                                    this.writer.println(heroList[i].getName() + " " + i + " reached level " + level);
+                                }
+                            }
                         }
-                        if (heroList[i].isDead()) {
+                        if (heroList[i].isDead() && !heroList[j].isDead()) {
                             this.writer.println("Player " + heroList[i].getName() + " " + i + " was killed by " + heroList[j].getName() + " " + j);
                             heroList[j].afterFightEffects(heroList[i].getLevel());
+                            if (currentLevel2 != heroList[j].getLevel()) {
+                                for (int level = currentLevel2 + 1; level <= heroList[j].getLevel(); level++) {
+                                    this.writer.println(heroList[j].getName() + " " + j + " reached level " + level);
+                                }
+                            }
+                        }
+
+                        if (heroList[i].isDead() && heroList[j].isDead()) {
+                            this.writer.println("Player " + heroList[j].getName() + " " + j + " was killed by " + heroList[i].getName() + " " + i);
+                            this.writer.println("Player " + heroList[i].getName() + " " + i + " was killed by " + heroList[j].getName() + " " + j);
                         }
                     }
                 }
             }
-            //System.out.println(angelsList[0].getName());
+//            System.out.println("=============================================");
+//            for (i = 0; i < p; i++) {
+//                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
+//            }
+//            System.out.println("==============================================");
             for (k = 0; k < numberOfAngels; k++) {
                 this.writer.println("Angel " + angelsList[k].getName() + " was spawned at " + angelsList[k].getX() + " " + angelsList[k].getY());
                 for (i = 0; i < p; i++) {
                     if (!heroList[i].isDead() && heroList[i].getX() == angelsList[k].getX()
                             && heroList[i].getY() == angelsList[k].getY()) {
+                        int currentLevel = heroList[i].getLevel();
                         heroList[i].receiveAngelPower(angelsList[k]);
+                        //System.out.println(heroList[i].getName() + " " + heroList[i].getXp());
                         String verb;
                         if (angelsList[k].getAngelType().equals("good")) {
                             verb = "helped ";
                         } else {
                             verb = "hit ";
                         }
-                        this.writer.println(angelsList[k].getName() + " " + verb + heroList[i].getName() + " " + i);
+                        if (!angelsList[k].getName().equals("Spawner") || (angelsList[k].getName().equals("Spawner") && heroList[i].isDead())) {
+                            this.writer.println(angelsList[k].getName() + " " + verb + heroList[i].getName() + " " + i);
+                        }
+                        if (angelsList[k].getName().equals("TheDoomer")) {
+                            this.writer.println("Player " + heroList[i].getName() + " " + i + " was killed by an angel");
+                        }
+                        if (angelsList[k].getName().equals("LevelUpAngel")) {
+                            this.writer.println(heroList[i].getName() + " " + i + " reached level " + heroList[i].getLevel());
+                        }
+                        if (angelsList[k].getName().equals("XPAngel") && heroList[i].getLevel() != currentLevel) {
+                            for (int level = currentLevel + 1; level <= heroList[i].getLevel(); level++) {
+                                this.writer.println(heroList[i].getName() + " " + i + " reached level " + level);
+                            }
+                        }
+                        if (angelsList[k].getName().equals("Dracula") && heroList[i].getHp() < 0) {
+                            this.writer.println("Player " + heroList[i].getName() + " " + i + " was killed by an angel");
+                        }
+                    } else if (heroList[i].isDead() && heroList[i].getX() == angelsList[k].getX()
+                            && heroList[i].getY() == angelsList[k].getY() && angelsList[k].getName().equals("Spawner")) {
+                        //heroList[i].setXp(0);
+                        heroList[i].receiveAngelPower(angelsList[k]);
+                        this.writer.println(angelsList[k].getName() + " " + "helped " + heroList[i].getName() + " " + i);
+                        this.writer.println("Player " + heroList[i].getName() + " " + i + " was brought to life by an angel");
                     }
                 }
             }
             //System.out.println(heroList[0].getHp() + " " + heroList[1].getHp());
-            System.out.println(heroList[1].getHp() + " " + heroList[1].getXp());
+//            System.out.println("=============================================");
+//            for (i = 0; i < p; i++) {
+//                System.out.println(heroList[i].getName() + " " + heroList[i].getLevel() + " " + heroList[i].getXp() + " " + heroList[i].getHp());
+//            }
+//            System.out.println("==============================================");
             this.writer.println("");
         }
     }

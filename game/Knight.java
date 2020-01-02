@@ -15,6 +15,10 @@ public class Knight extends Hero implements Fighter {
     private final int hpPerLevelKnight = 80;
     private float executeModifier, slamModifier;
     private boolean executeModifierIsInitialZero, slamModifierisInitialZero = false;
+    private float executeKnightModifier, slamKnightModifier;
+    private float executeRogueModifier, slamRogueModifier;
+    private float executePyromancerModifier, slamPyromancerModifier;
+    private float executeWizardModifier, slamWizardModifier;
 
     Knight(final char heroType, final int x, final int y, final char land) {
         super(heroType, x, y, land, "Knight");
@@ -23,6 +27,14 @@ public class Knight extends Hero implements Fighter {
         super.setHp(hpKnight);
         this.executeModifier = 0;
         this.slamModifier = 0;
+        this.executeRogueModifier = 1.15f;
+        this.slamRogueModifier = 0.8f;
+        this.executePyromancerModifier = 1.1f;
+        this.slamPyromancerModifier = 0.9f;
+        this.executeWizardModifier = 0.8f;
+        this.slamWizardModifier = 1.05f;
+        this.executeKnightModifier = 1.0f;
+        this.slamKnightModifier = 1.2f;
     }
 
     @Override
@@ -30,8 +42,26 @@ public class Knight extends Hero implements Fighter {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
-        this.slamModifier = strategy.changeDamage(this.slamModifier);
-        this.executeModifier = strategy.changeDamage(this.executeModifier);
+        this.executeRogueModifier = strategy.changeDamage(this.executeRogueModifier);
+        this.slamRogueModifier = strategy.changeDamage(this.slamRogueModifier);
+        this.executePyromancerModifier = strategy.changeDamage(this.executePyromancerModifier);
+        this.slamPyromancerModifier = strategy.changeDamage(this.slamPyromancerModifier);
+        this.executeWizardModifier = strategy.changeDamage(this.executeWizardModifier);
+        this.slamWizardModifier = strategy.changeDamage(this.slamWizardModifier);
+        //this.executeKnightModifier = strategy.changeDamage(this.executeKnightModifier);?????????????
+        this.slamKnightModifier = strategy.changeDamage(this.slamKnightModifier);
+    }
+
+    @Override
+    public void changeAllModifiers(float change) {
+        this.executePyromancerModifier += change;
+        this.slamPyromancerModifier += change;
+        this.executeWizardModifier += change;
+        this.slamWizardModifier += change;
+        //this.executeKnightModifier += change;
+        this.slamKnightModifier += change;
+        this.executeRogueModifier += change;
+        this.slamRogueModifier += change;
     }
 
     /**
@@ -43,20 +73,21 @@ public class Knight extends Hero implements Fighter {
         float executeDamage, slamDamage;
         int roundsImobilised = 1;
 
-        /*
-        Trebuie sa pun conditia asta ca sa nu am probleme atunci cand aplic o strategie.
-         */
-        if (executeModifier == 0 && slamModifier == 0) {
-            KnightVisitor visitor = new KnightVisitor();
-            hero.accept(visitor);
-            executeModifier = visitor.getExecuteModifier();
-            slamModifier = visitor.getSlamModifier();
-            if (executeModifier == 1.0f) {
-                executeModifierIsInitialZero = true;
-            }
-            if (slamModifier == 1.0f) {
-                slamModifierisInitialZero = true;
-            }
+        if (hero instanceof Pyromancer) {
+            this.executeModifier = executePyromancerModifier;
+            this.slamModifier = slamPyromancerModifier;
+        }
+        if (hero instanceof Rogue) {
+            this.executeModifier = executeRogueModifier;
+            this.slamModifier = slamRogueModifier;
+        }
+        if (hero instanceof Wizard) {
+            this.executeModifier = executeWizardModifier;
+            this.slamModifier = slamWizardModifier;
+        }
+        if (hero instanceof Knight) {
+            this.executeModifier = executeKnightModifier;
+            this.slamModifier = slamKnightModifier;
         }
 
         float maxHp = hero.getInitialHp() + hero.getHpPerLevel() * hero.getLevel();
@@ -98,7 +129,6 @@ public class Knight extends Hero implements Fighter {
         int intExecuteDamage = Math.round(executeDamage);
         int intSlamDamage = Math.round(slamDamage);
         int totalDamage = intExecuteDamage + intSlamDamage;
-        //System.out.println("execute:" + executeModifier + " slam:" + slamModifier);
 
         hero.becomeImmobilized(roundsImobilised);
         hero.setDamage(totalDamage);
