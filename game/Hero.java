@@ -1,21 +1,26 @@
 package game;
 
 import angels.AngelVisitor;
+import strategies.Strategy;
 
+/**
+ * Aceasta clasa intruneste caracteristicile comune ale tuturor eroilor.
+ */
 public abstract class Hero {
     private int xp, hp, level, initialHp, hpPerLevel;
     private int x, y;
     private char land;
     private int damage;
     private int damageOvertime;
-    public boolean dead;
+    private boolean dead;
     private String name;
     private int passiveTurns;
     private int immobilized;
     private char heroType;
     private Strategy strategy;
+    private Magician magician = Magician.getInstance();
 
-    Hero(final char heroType, final int x, final int y, final char land, String name) {
+    Hero(final char heroType, final int x, final int y, final char land, final String name) {
         this.xp = 0;
         this.level = 0;
         this.x = x;
@@ -30,21 +35,19 @@ public abstract class Hero {
         this.name = name;
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    public void setStrategy(Strategy strategy) {
+    public final void setStrategy(final Strategy strategy) {
         this.strategy = strategy;
     }
 
-    public Strategy getStrategy() {
+    public final Strategy getStrategy() {
         return strategy;
     }
 
-    public abstract void executeStrategy();
-
-    public char getHeroType() {
+    final char getHeroType() {
         return heroType;
     }
 
@@ -68,7 +71,7 @@ public abstract class Hero {
         return initialHp;
     }
 
-    public final int getPassiveTurns() {
+    final int getPassiveTurns() {
         return passiveTurns;
     }
 
@@ -125,16 +128,20 @@ public abstract class Hero {
         return immobilized;
     }
 
-    public void setDead(boolean dead) {
+    public final void setDead(final boolean dead) {
         this.dead = dead;
     }
 
-    public void setXp(int xp) {
+    public final void setXp(final int xp) {
         this.xp = xp;
     }
 
-    public void setLevel(int level) {
+    public final void setLevel(final int level) {
         this.level = level;
+    }
+
+    public final void setHpLevelUp() {
+        this.hp = initialHp + hpPerLevel * this.level;
     }
 
     /**
@@ -154,11 +161,11 @@ public abstract class Hero {
      * Aceasta metoda ma va ajuta sa modific nivelul unui erou la finalul
      * unei lupte in care acesta a fost implicat.
      */
-    public void levelUp() {
+    public final void levelUp() {
         final int xpLevelOne = 250;
         final int coefficient = 50;
         int xpLevelUp = xpLevelOne + this.level * coefficient;
-        if (this.xp >= xpLevelUp) { // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! >=?
+        if (this.xp >= xpLevelUp) {
             int levelCurrent = this.level;
             this.level = ((this.xp - xpLevelOne) / coefficient) + 1;
             if (levelCurrent != this.level) {
@@ -206,7 +213,12 @@ public abstract class Hero {
         }
     }
 
-    final void moveOutsideTheMap (final int newX, final int newY) {
+    /**
+     * Aceasta metoda ma va ajuta sa mut jucatorii in afara hartii.
+     * @param newX reprezinta randul pe care se va muta eroul
+     * @param newY reprezinta coloana pe care se va muta eroul
+     */
+    final void moveOutsideTheMap(final int newX, final int newY) {
         if (this.immobilized == 0) {
             this.x = newX;
             this.y = newY;
@@ -215,24 +227,37 @@ public abstract class Hero {
             this.immobilized--;
         }
     }
+
     /**
      * Aceasta metoda ma va ajuta sa-i modific eroului care a fost implicat intr-o lupta
      * XP-ul si nivelul.
-     * @param heroLevel
+     * @param heroLevel reprezinta eroul caruia urmeaza sa-i modific XP-ul si nivelul.
      */
     final void afterFightEffects(final int heroLevel) {
         getXpWinner(heroLevel);
         levelUp();
     }
 
-    public void setHpLevelUp() {
-        this.hp = initialHp + hpPerLevel * this.level;
+    final void notifyObserverForNewPowers(final AngelVisitor angelVisitor,
+                                          final String verb, final int i) {
+        magician.updateHeroPowers(angelVisitor, this, verb, i);
+    }
+
+    final void notifyObserverForBeingKilledByAnAngel(final int i) {
+        magician.updateHeroKilledByAnAngel(this, i);
+    }
+
+    final void notifyObserverForBeingKilledByAHero(final Hero opponent,
+                                                   final int i, final int j) {
+        magician.updateHeroKilledByAHero(this, opponent, i, j);
+    }
+
+    final void notifyObserverForRevival(final int i) {
+        magician.updateHeroBroughtToLifeByAnAngel(this, i);
     }
 
     public abstract void attack(Hero hero);
-
-    public abstract void accept(FighterVisitor visitor);
-
     public abstract void receiveAngelPower(AngelVisitor angelVisitor);
     public abstract void changeAllModifiers(float change);
+    public abstract void executeStrategy();
 }

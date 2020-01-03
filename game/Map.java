@@ -1,16 +1,19 @@
 package game;
 
-public class Map {
+/**
+ * Aceasta clasa ma va ajuta sa retin tipurile de teren din joc.
+ */
+public final class Map {
     private static Map map;
     private char[][] landTypes;
 
     private Map() { }
 
-    public void buildMap(char[][] landTypes) {
-        this.landTypes = landTypes;
+    void buildMap(final char[][] mapLandTypes) {
+        this.landTypes = mapLandTypes;
     }
 
-    public char landType(int x, int y) {
+    char landType(final int x, final int y) {
         return landTypes[x][y];
     }
 

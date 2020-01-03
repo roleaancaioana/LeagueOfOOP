@@ -1,8 +1,12 @@
 package game;
 
 import angels.AngelVisitor;
+import strategies.Strategy;
 
-public class Knight extends Hero implements Fighter {
+/**
+ * Aceasta clasa ilustreaza comportamentul unui erou de tip Knight.
+ */
+public class Knight extends Hero {
     private final float executeBaseDamage = 200;
     private final float executeBaseDamagePerLevel = 30;
     private final float slamBaseDamage = 100;
@@ -13,8 +17,15 @@ public class Knight extends Hero implements Fighter {
     private final float landModifier = 1.15f;
     private final int hpKnight = 900;
     private final int hpPerLevelKnight = 80;
+    private final float initialExecuteKnightModifier = 1.0f;
+    private final float initialSlamKnightModifier = 1.2f;
+    private final float initialExecuteRogueModifier = 1.15f;
+    private final float initialSlamRogueModifier = 0.8f;
+    private final float initialExecutePyromancerModifier = 1.1f;
+    private final float initialSlamPyromancerModifier = 0.9f;
+    private final float initialExecuteWizardModifier = 0.8f;
+    private final float initialSlamWizardModifier = 1.05f;
     private float executeModifier, slamModifier;
-    private boolean executeModifierIsInitialZero, slamModifierisInitialZero = false;
     private float executeKnightModifier, slamKnightModifier;
     private float executeRogueModifier, slamRogueModifier;
     private float executePyromancerModifier, slamPyromancerModifier;
@@ -25,20 +36,18 @@ public class Knight extends Hero implements Fighter {
         super.setInitialHp(hpKnight);
         super.setHpPerLevel(hpPerLevelKnight);
         super.setHp(hpKnight);
-        this.executeModifier = 0;
-        this.slamModifier = 0;
-        this.executeRogueModifier = 1.15f;
-        this.slamRogueModifier = 0.8f;
-        this.executePyromancerModifier = 1.1f;
-        this.slamPyromancerModifier = 0.9f;
-        this.executeWizardModifier = 0.8f;
-        this.slamWizardModifier = 1.05f;
-        this.executeKnightModifier = 1.0f;
-        this.slamKnightModifier = 1.2f;
+        this.executeRogueModifier = initialExecuteRogueModifier;
+        this.slamRogueModifier = initialSlamRogueModifier;
+        this.executePyromancerModifier = initialExecutePyromancerModifier;
+        this.slamPyromancerModifier = initialSlamPyromancerModifier;
+        this.executeWizardModifier = initialExecuteWizardModifier;
+        this.slamWizardModifier = initialSlamWizardModifier;
+        this.executeKnightModifier = initialExecuteKnightModifier;
+        this.slamKnightModifier = initialSlamKnightModifier;
     }
 
     @Override
-    public void executeStrategy() {
+    public final void executeStrategy() {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
@@ -48,17 +57,15 @@ public class Knight extends Hero implements Fighter {
         this.slamPyromancerModifier = strategy.changeDamage(this.slamPyromancerModifier);
         this.executeWizardModifier = strategy.changeDamage(this.executeWizardModifier);
         this.slamWizardModifier = strategy.changeDamage(this.slamWizardModifier);
-        //this.executeKnightModifier = strategy.changeDamage(this.executeKnightModifier);?????????????
         this.slamKnightModifier = strategy.changeDamage(this.slamKnightModifier);
     }
 
     @Override
-    public void changeAllModifiers(float change) {
+    public final void changeAllModifiers(final float change) {
         this.executePyromancerModifier += change;
         this.slamPyromancerModifier += change;
         this.executeWizardModifier += change;
         this.slamWizardModifier += change;
-        //this.executeKnightModifier += change;
         this.slamKnightModifier += change;
         this.executeRogueModifier += change;
         this.slamRogueModifier += change;
@@ -108,18 +115,12 @@ public class Knight extends Hero implements Fighter {
              */
             executeDamage = executeBaseDamage + executeBaseDamagePerLevel * this.getLevel();
             executeDamage *= executeModifier;
-            executeDamage = Math.round(executeDamage); // new!!!!!!
+            executeDamage = Math.round(executeDamage);
 
-            /*
-            Calculez damage-ul dat de abilitatea slam.
-             */
             slamDamage = slamBaseDamage + slamBaseDamagePerLevel * this.getLevel();
             slamDamage *= slamModifier;
-            slamDamage = Math.round(slamDamage); // new!!!!!!!
+            slamDamage = Math.round(slamDamage);
 
-            /*
-            Aplic amplificatorul corespunzator terenului Land.
-             */
             if (this.getLand() == 'L') {
                 executeDamage *= landModifier;
                 slamDamage *= landModifier;
@@ -174,36 +175,7 @@ public class Knight extends Hero implements Fighter {
     }
 
     @Override
-    public final void accept(final FighterVisitor v) {
-        v.attack(this);
-    }
-
-    public float getSlamModifier() {
-        return slamModifier;
-    }
-
-    public void setSlamModifier(float slamModifier) {
-        this.slamModifier = slamModifier;
-    }
-
-    public float getExecuteModifier() {
-        return executeModifier;
-    }
-
-    public void setExecuteModifier(float executeModifier) {
-        this.executeModifier = executeModifier;
-    }
-
-    @Override
-    public void receiveAngelPower(AngelVisitor angelVisitor) {
+    public final void receiveAngelPower(final AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
-    }
-
-    public boolean isExecuteModifierIsInitialZero() {
-        return executeModifierIsInitialZero;
-    }
-
-    public boolean isSlamModifierisInitialZero() {
-        return slamModifierisInitialZero;
     }
 }

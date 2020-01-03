@@ -1,16 +1,22 @@
 package angels;
 
-import game.*;
+import game.Knight;
+import game.Magician;
+import game.Pyromancer;
+import game.Rogue;
+import game.Wizard;
 
 public class LifeGiver extends AngelVisitor {
-    LifeGiver(String name, String angelType, int x, int y) {
+    private Magician magician = Magician.getInstance();
+    LifeGiver(final String name, final String angelType, final int x, final int y) {
         super(name, angelType, x, y);
     }
 
     @Override
-    public void angelPower(Pyromancer pyromancer) {
+    public final void angelPower(final Pyromancer pyromancer) {
         final int angelModifier = 80;
-        final int maxLevelHp = pyromancer.getLevel() * pyromancer.getHpPerLevel() + pyromancer.getInitialHp();
+        final int maxLevelHp = pyromancer.getLevel() * pyromancer.getHpPerLevel()
+                + pyromancer.getInitialHp();
         int newHp = pyromancer.getHp() + angelModifier;
         if (newHp > maxLevelHp) {
             newHp = maxLevelHp;
@@ -19,7 +25,7 @@ public class LifeGiver extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Knight knight) {
+    public final void angelPower(final Knight knight) {
         final int angelModifier = 100;
         final int maxLevelHp = knight.getLevel() * knight.getHpPerLevel() + knight.getInitialHp();
         int newHp = knight.getHp() + angelModifier;
@@ -30,7 +36,7 @@ public class LifeGiver extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Rogue rogue) {
+    public final void angelPower(final Rogue rogue) {
         final int angelModifier = 90;
         final int maxLevelHp = rogue.getLevel() * rogue.getHpPerLevel() + rogue.getInitialHp();
         int newHp = rogue.getHp() + angelModifier;
@@ -41,7 +47,7 @@ public class LifeGiver extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Wizard wizard) {
+    public final void angelPower(final Wizard wizard) {
         final int angelModifier = 120;
         final int maxLevelHp = wizard.getLevel() * wizard.getHpPerLevel() + wizard.getInitialHp();
         int newHp = wizard.getHp() + angelModifier;
@@ -49,5 +55,10 @@ public class LifeGiver extends AngelVisitor {
             newHp = maxLevelHp;
         }
         wizard.setHp(newHp);
+    }
+
+    @Override
+    public final void notifyObserver() {
+        magician.updateAngelPosition(this);
     }
 }

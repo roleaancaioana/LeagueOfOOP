@@ -3,7 +3,7 @@ package game;
 /**
  * Aceasta clasa ma va ajuta la crearea eroilor.
  */
-final class HeroFactory {
+final class HeroesFactory {
     Hero getHero(final char heroType, final int x, final int y, final char land) {
         if (heroType == 'P') {
             return new Pyromancer(heroType, x, y, land);

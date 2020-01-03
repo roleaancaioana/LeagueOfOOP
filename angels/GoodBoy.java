@@ -1,17 +1,19 @@
 package angels;
 
 import game.Knight;
+import game.Magician;
 import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
 public class GoodBoy extends AngelVisitor {
-    GoodBoy(String name, String angelType, int x, int y) {
+    private Magician magician = Magician.getInstance();
+    GoodBoy(final String name, final String angelType, final int x, final int y) {
         super(name, angelType, x, y);
     }
 
     @Override
-    public final void angelPower(Pyromancer pyromancer) {
+    public final void angelPower(final Pyromancer pyromancer) {
         final float angelDamageModifier = 0.5f;
         pyromancer.changeAllModifiers(angelDamageModifier);
 
@@ -21,7 +23,7 @@ public class GoodBoy extends AngelVisitor {
     }
 
     @Override
-    public final void angelPower(Knight knight) {
+    public final void angelPower(final Knight knight) {
         final float angelDamageModifier = 0.4f;
         knight.changeAllModifiers(angelDamageModifier);
 
@@ -31,7 +33,7 @@ public class GoodBoy extends AngelVisitor {
     }
 
     @Override
-    public final void angelPower(Rogue rogue) {
+    public final void angelPower(final Rogue rogue) {
         final float angelDamageModifier = 0.4f;
         rogue.changeAllModifiers(angelDamageModifier);
 
@@ -41,12 +43,17 @@ public class GoodBoy extends AngelVisitor {
     }
 
     @Override
-    public final void angelPower(Wizard wizard) {
+    public final void angelPower(final Wizard wizard) {
         final float angelDamageModifier = 0.3f;
         wizard.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 50;
         int newHp = wizard.getHp() + angelHpModifier;
         wizard.setHp(newHp);
+    }
+
+    @Override
+    public final void notifyObserver() {
+        magician.updateAngelPosition(this);
     }
 }

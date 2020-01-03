@@ -1,5 +1,8 @@
 package angels;
 
+/**
+ * Aceasta clasa ajuta la crearea ingerilor.
+ */
 public final class AngelsFactory {
     public AngelVisitor getAngel(final String name, final int x, final int y) {
         if (name.equals("DamageAngel")) {

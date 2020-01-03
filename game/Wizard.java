@@ -1,13 +1,24 @@
 package game;
 
 import angels.AngelVisitor;
+import strategies.Strategy;
 
-public class Wizard extends Hero implements Fighter {
+/**
+ * Aceasta clasa ilustreaza comportamentul unui erou de tip Wizard.
+ */
+public class Wizard extends Hero {
     private final int hpWizard = 400;
     private final int hpPerLevelWizard = 30;
+    private final float initialDeflectRogueModifier = 1.2f;
+    private final float initialDrainRogueModifier = 0.8f;
+    private final float initialDrainWizardModifier = 1.05f;
+    private final float initialDeflectKnightModifier = 1.4f;
+    private final float initialDrainKnightModifier = 1.2f;
+    private final float initialDeflectPyromancerModifier = 1.3f;
+    private final float initialDrainPyromancerModifier = 0.9f;
     private float deflectModifier, drainModifier;
     private float deflectRogueModifier, drainRogueModifier;
-    public float drainWizardModifier;
+    private float drainWizardModifier;
     private float deflectKnightModifier, drainKnightModifier;
     private float deflectPyromancerModifier, drainPyromancerModifier;
 
@@ -16,17 +27,17 @@ public class Wizard extends Hero implements Fighter {
         super.setInitialHp(hpWizard);
         super.setHpPerLevel(hpPerLevelWizard);
         super.setHp(hpWizard);
-        this.drainRogueModifier = 0.8f;
-        this.deflectRogueModifier = 1.2f;
-        this.deflectKnightModifier = 1.4f;
-        this.drainKnightModifier = 1.2f;
-        this.deflectPyromancerModifier = 1.3f;
-        this.drainPyromancerModifier = 0.9f;
-        this.drainWizardModifier = 1.05f;
+        this.drainRogueModifier = initialDrainRogueModifier;
+        this.deflectRogueModifier = initialDeflectRogueModifier;
+        this.deflectKnightModifier = initialDeflectKnightModifier;
+        this.drainKnightModifier = initialDrainKnightModifier;
+        this.deflectPyromancerModifier = initialDeflectPyromancerModifier;
+        this.drainPyromancerModifier = initialDrainPyromancerModifier;
+        this.drainWizardModifier = initialDrainWizardModifier;
     }
 
     @Override
-    public void executeStrategy() {
+    public final void executeStrategy() {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
@@ -40,7 +51,7 @@ public class Wizard extends Hero implements Fighter {
     }
 
     @Override
-    public void changeAllModifiers(float change) {
+    public final void changeAllModifiers(final float change) {
         this.drainRogueModifier += change;
         this.deflectRogueModifier += change;
         this.deflectKnightModifier += change;
@@ -97,15 +108,9 @@ public class Wizard extends Hero implements Fighter {
         float baseHp = Math.min(coefficient * maxHp,
                 (float) hero.getHp());
 
-        /*
-         Aplic amplificatorul de rasa asupra procentului.
-         */
         drainPercentage *= drainModifier;
-
         float drainDamage = drainPercentage * baseHp;
-        /*
-         Aplic amplificatorul corespunzator terenului Desert.
-        */
+
         if (this.getLand() == 'D') {
             drainDamage *= desertModifier;
         }
@@ -114,7 +119,7 @@ public class Wizard extends Hero implements Fighter {
     }
 
     /**
-     * Metoda ma va ajutat la calculul damage-ului rezultat din abilitatea
+     * Metoda ma va ajuta la calculul damage-ului rezultat din abilitatea
      * Deflect a acestui erou.
      * @param hero reprezinta eroul cu care se va lupta acest personaj
      * @return valoarea damage-ului rezultat din abilitatea Deflect
@@ -143,14 +148,8 @@ public class Wizard extends Hero implements Fighter {
         }
 
         float deflectDamage = damageWithoutRaceModifiers * deflectPercentage;
-        /*
-         Aplic amplificatorul de rasa.
-         */
         deflectDamage *= deflectModifier;
 
-        /*
-         Aplic amplificatorul corespunzator terenului Desert.
-         */
         if (this.getLand() == 'D') {
             deflectDamage *= desertModifier;
         }
@@ -158,28 +157,7 @@ public class Wizard extends Hero implements Fighter {
     }
 
     @Override
-    public final void accept(final FighterVisitor v) {
-        v.attack(this);
-    }
-
-    public float getDrainModifier() {
-        return drainModifier;
-    }
-
-    public void setDrainModifier(float drainModifier) {
-        this.drainModifier = drainModifier;
-    }
-
-    public float getDeflectModifier() {
-        return deflectModifier;
-    }
-
-    public void setDeflectModifier(float deflectModifier) {
-        this.deflectModifier = deflectModifier;
-    }
-
-    @Override
-    public void receiveAngelPower(AngelVisitor angelVisitor) {
+    public final void receiveAngelPower(final AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
 }

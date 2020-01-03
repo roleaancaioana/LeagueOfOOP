@@ -1,10 +1,18 @@
 package game;
 
 import angels.AngelVisitor;
+import strategies.Strategy;
 
-public class Pyromancer extends Hero implements Fighter {
+/**
+ * Aceasta clasa ilustreaza comportamentul unui erou de tip Pyromancer.
+ */
+public class Pyromancer extends Hero {
     private final int hpPyromancer = 500;
     private final int hpPerLevelPyromancer = 50;
+    private final float initialRogueModifier = 0.8f;
+    private final float initialKnightModifier = 1.2f;
+    private final float initialPyromancerModifier = 0.9f;
+    private final float initialWizardModifier = 1.05f;
     private float modifier;
     private float rogueModifier;
     private float knightModifier;
@@ -16,15 +24,14 @@ public class Pyromancer extends Hero implements Fighter {
         super.setInitialHp(hpPyromancer);
         super.setHpPerLevel(hpPerLevelPyromancer);
         super.setHp(hpPyromancer);
-        this.modifier = 0;
-        this.pyromancerModifier = 0.9f;
-        this.wizardModifier = 1.05f;
-        this.rogueModifier = 0.8f;
-        this.knightModifier = 1.2f;
+        this.pyromancerModifier = initialPyromancerModifier;
+        this.wizardModifier = initialWizardModifier;
+        this.rogueModifier = initialRogueModifier;
+        this.knightModifier = initialKnightModifier;
     }
 
     @Override
-    public void executeStrategy() {
+    public final void executeStrategy() {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
@@ -35,7 +42,7 @@ public class Pyromancer extends Hero implements Fighter {
     }
 
     @Override
-    public void changeAllModifiers(float change) {
+    public final void changeAllModifiers(final float change) {
         rogueModifier += change;
         knightModifier += change;
         wizardModifier += change;
@@ -63,9 +70,9 @@ public class Pyromancer extends Hero implements Fighter {
             this.modifier = wizardModifier;
         }
 
-        int intFireblastDamage = getFireblastDamage(modifier);
-        int intTotalIgniteBaseDamage = getActiveIgniteDamage(modifier);
-        int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage(modifier);
+        int intFireblastDamage = getFireblastDamage();
+        int intTotalIgniteBaseDamage = getActiveIgniteDamage();
+        int intTotalIgniteDamagePerTurn = getPassiveIgniteDamage();
 
         int totalActiveDamage = intFireblastDamage + intTotalIgniteBaseDamage;
 
@@ -78,10 +85,9 @@ public class Pyromancer extends Hero implements Fighter {
     /**
      * Aceasta metoda ma va ajuta la calculul damage-ului rezultat in urma
      * aplicarii abilitatii Fireblast.
-     * @param modifier reprezinta amplificatorul de rasa
      * @return valoarea damage-ului dat de abilitatea Fireblast
      */
-    private int getFireblastDamage(final float modifier) {
+    private int getFireblastDamage() {
         final float initialFireblastDamage = 350;
         final float fireblastDamagePerLevel = 50;
         final float volcanicModifier = 1.25f;
@@ -92,7 +98,7 @@ public class Pyromancer extends Hero implements Fighter {
             fireblastDamage *= volcanicModifier;
         }
 
-        fireblastDamage = Math.round(fireblastDamage); //!!!!!!new
+        fireblastDamage = Math.round(fireblastDamage);
         fireblastDamage *= modifier;
 
         return (Math.round(fireblastDamage));
@@ -102,10 +108,9 @@ public class Pyromancer extends Hero implements Fighter {
     /**
      * Metoda ma va ajuta la calculul damage-ului activ rezultat din
      * abilitatea Ignite a acestui erou si aplicat asupra oponentului sau.
-     * @param modifier reprezinta amplificatorul de rasa
      * @return valoarea damage-ului activ dat de abilitatea Ignite
      */
-    private int getActiveIgniteDamage(final float modifier) {
+    private int getActiveIgniteDamage() {
         final float igniteBaseDamage = 150;
         final float igniteBaseDamagePerLevel = 20;
         final float volcanicModifier = 1.25f;
@@ -116,7 +121,7 @@ public class Pyromancer extends Hero implements Fighter {
             totalIgniteBaseDamage *= volcanicModifier;
         }
 
-        totalIgniteBaseDamage = Math.round(totalIgniteBaseDamage); // !!!!!new
+        totalIgniteBaseDamage = Math.round(totalIgniteBaseDamage);
 
         totalIgniteBaseDamage *= modifier;
 
@@ -126,10 +131,9 @@ public class Pyromancer extends Hero implements Fighter {
     /**
      * Metoda ma va ajuta la calculul damage-ului pasiv rezultat din
      * abilitatea Ignite a acestui erou.
-     * @param modifier reprezinta amplificatorul de rasa
      * @return valoarea damage-ului pasiv dat de abilitatea Ignite
      */
-    private int getPassiveIgniteDamage(final float modifier) {
+    private int getPassiveIgniteDamage() {
         final float igniteDamagePerTurn = 50;
         final float igniteDamagePerTurnPerLevel = 30;
         final float volcanicModifier = 1.25f;
@@ -141,7 +145,7 @@ public class Pyromancer extends Hero implements Fighter {
             totalIgniteDamagePerTurn *= volcanicModifier;
         }
 
-        totalIgniteDamagePerTurn = Math.round(totalIgniteDamagePerTurn); //!!!!!!!new
+        totalIgniteDamagePerTurn = Math.round(totalIgniteDamagePerTurn);
         totalIgniteDamagePerTurn *= modifier;
 
         return (Math.round(totalIgniteDamagePerTurn));
@@ -174,21 +178,8 @@ public class Pyromancer extends Hero implements Fighter {
         return (intFireblastDamageGived + intIgniteDamageGived);
     }
 
-    public float getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(float modifier) {
-        this.modifier = modifier;
-    }
-
     @Override
-    public final void accept(final FighterVisitor v) {
-        v.attack(this);
-    }
-
-    @Override
-    public void receiveAngelPower(AngelVisitor angelVisitor) {
+    public final void receiveAngelPower(final AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
 }

@@ -1,17 +1,19 @@
 package angels;
 
 import game.Knight;
+import game.Magician;
 import game.Pyromancer;
 import game.Rogue;
 import game.Wizard;
 
 public class SmallAngel extends AngelVisitor {
-    SmallAngel(String name, String angelType, int x, int y) {
+    private Magician magician = Magician.getInstance();
+    SmallAngel(final String name, final String angelType, final int x, final int y) {
         super(name, angelType, x, y);
     }
 
     @Override
-    public void angelPower(Pyromancer pyromancer) {
+    public final void angelPower(final Pyromancer pyromancer) {
         final float angelDamageModifier = 0.15f;
         pyromancer.changeAllModifiers(angelDamageModifier);
 
@@ -21,7 +23,7 @@ public class SmallAngel extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Knight knight) {
+    public final void angelPower(final Knight knight) {
         final float angelDamageModifier = 0.1f;
         knight.changeAllModifiers(angelDamageModifier);
 
@@ -31,7 +33,7 @@ public class SmallAngel extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Rogue rogue) {
+    public final void angelPower(final Rogue rogue) {
         final float angelDamageModifier = 0.05f;
         rogue.changeAllModifiers(angelDamageModifier);
 
@@ -41,12 +43,17 @@ public class SmallAngel extends AngelVisitor {
     }
 
     @Override
-    public void angelPower(Wizard wizard) {
+    public final void angelPower(final Wizard wizard) {
         final float angelDamageModifier = 0.1f;
         wizard.changeAllModifiers(angelDamageModifier);
 
         final int angelHpModifier = 25;
         int newHp = wizard.getHp() + angelHpModifier;
         wizard.setHp(newHp);
+    }
+
+    @Override
+    public final void notifyObserver() {
+        magician.updateAngelPosition(this);
     }
 }

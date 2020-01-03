@@ -1,8 +1,12 @@
 package game;
 
 import angels.AngelVisitor;
+import strategies.Strategy;
 
-public class Rogue extends Hero implements Fighter {
+/**
+ * Aceasta clasa ilustreaza comportamentul unui erou de tip Rogue.
+ */
+public class Rogue extends Hero {
     private final int hpRogue = 600;
     private final int hpPerLevelRogue = 40;
     private int counterAttacksRogue;
@@ -12,8 +16,16 @@ public class Rogue extends Hero implements Fighter {
     private final float paralysisBaseDamage = 40;
     private final float paralysisBaseDamagePerLevel = 10;
     private final float bonusWoodsModifier = 1.15f;
-    private int oldCounterAttacksRogue;
     private final int attacksCoefficient = 3;
+    private final float initialBackstabKnightModifier = 0.9f;
+    private final float initialParalysisKnightModifier = 0.8f;
+    private final float initialBackstabPyromancerModifier = 1.25f;
+    private final float initialParalysisPyromancerModifier = 1.2f;
+    private final float initialBackstabRogueModifier = 1.2f;
+    private final float initialParalysisRogueModifier = 0.9f;
+    private final float initialBackstabWizardModifier = 1.25f;
+    private final float initialParalysisWizardModifier = 1.25f;
+    private int oldCounterAttacksRogue;
     private float paralysisModifier, backstabModifier;
     private float backstabKnightModifier, paralysisKnightModifier;
     private float backstabPyromancerModifier, paralysisPyromancerModifier;
@@ -27,20 +39,18 @@ public class Rogue extends Hero implements Fighter {
         super.setHp(hpRogue);
         this.counterAttacksRogue = 0;
         this.oldCounterAttacksRogue = 0;
-        this.backstabModifier = 0;
-        this.paralysisModifier = 0;
-        this.backstabRogueModifier = 1.2f;
-        this.paralysisRogueModifier = 0.9f;
-        this.backstabWizardModifier = 1.25f;
-        this.paralysisWizardModifier = 1.25f;
-        this.backstabKnightModifier = 0.9f;
-        this.paralysisKnightModifier = 0.8f;
-        this.backstabPyromancerModifier = 1.25f;
-        this.paralysisPyromancerModifier = 1.2f;
+        this.backstabRogueModifier = initialBackstabRogueModifier;
+        this.paralysisRogueModifier = initialParalysisRogueModifier;
+        this.backstabWizardModifier = initialBackstabWizardModifier;
+        this.paralysisWizardModifier = initialParalysisWizardModifier;
+        this.backstabKnightModifier = initialBackstabKnightModifier;
+        this.paralysisKnightModifier = initialParalysisKnightModifier;
+        this.backstabPyromancerModifier = initialBackstabPyromancerModifier;
+        this.paralysisPyromancerModifier = initialParalysisPyromancerModifier;
     }
 
     @Override
-    public void executeStrategy() {
+    public final void executeStrategy() {
         Strategy strategy = super.getStrategy();
         int newHp = strategy.changeHp(super.getHp());
         super.setHp(newHp);
@@ -55,7 +65,7 @@ public class Rogue extends Hero implements Fighter {
     }
 
     @Override
-    public void changeAllModifiers(float change) {
+    public final void changeAllModifiers(final float change) {
         this.backstabRogueModifier += change;
         this.paralysisRogueModifier += change;
         this.backstabWizardModifier += change;
@@ -102,9 +112,9 @@ public class Rogue extends Hero implements Fighter {
             passiveTurns = roundsOvertime;
         }
 
-        int intBackstabDamage = getBackstabDamage(hero);
+        int intBackstabDamage = getBackstabDamage();
 
-        int intParalysisDamage = getParalysisDamage(hero);
+        int intParalysisDamage = getParalysisDamage();
         int totalActiveDamage = intBackstabDamage + intParalysisDamage;
 
         hero.setDamage(totalActiveDamage);
@@ -117,10 +127,9 @@ public class Rogue extends Hero implements Fighter {
     /**
      * Metoda ma va ajuta la calculul damage-ului rezultat in urma
      * aplicarii abilitatii Backstab a acestui erou.
-     * @param hero reprezinta personajul cu care se va lupta acest erou
      * @return damage-ul rezultat in urma aplicarii abilitatii Backstab
      */
-    private int getBackstabDamage(final Hero hero) {
+    private int getBackstabDamage() {
         float backstabDamage = backstabBaseDamage + this.getLevel() * backstabBaseDamagePerLevel;
 
         if (this.counterAttacksRogue % attacksCoefficient == 0 && this.getLand() == 'W') {
@@ -130,14 +139,9 @@ public class Rogue extends Hero implements Fighter {
         this.oldCounterAttacksRogue = this.counterAttacksRogue;
         this.counterAttacksRogue++;
 
-        /*
-         Aplic amplificatorul de rasa.
-        */
         backstabDamage *= backstabModifier;
         backstabDamage = Math.round(backstabDamage);
-        /*
-         Aplic amplificatorul corespunzator terenului Woods.
-        */
+
         if (this.getLand() == 'W') {
             backstabDamage *= bonusWoodsModifier;
         }
@@ -147,20 +151,14 @@ public class Rogue extends Hero implements Fighter {
     /**
      * Metoda ma va ajuta la calculul damage-ului rezultat in urma
      * aplicarii abilitatii Paralysis a acestui erou.
-     * @param hero reprezinta oponentul acestui erou
      * @return damage-ul rezultat in urma aplicarii abilitatii Paralysis
      */
-    private int getParalysisDamage(final Hero hero) {
+    private int getParalysisDamage() {
         float paralysisDamage = paralysisBaseDamage + paralysisBaseDamagePerLevel * this.getLevel();
 
-        /*
-         Aplic amplificatorul de rasa.
-        */
         paralysisDamage *= paralysisModifier;
         paralysisDamage = Math.round(paralysisDamage);
-        /*
-         Aplic amplificatorul corespunzator terenului Woods.
-        */
+
         if (this.getLand() == 'W') {
             paralysisDamage *= bonusWoodsModifier;
         }
@@ -194,28 +192,7 @@ public class Rogue extends Hero implements Fighter {
     }
 
     @Override
-    public final void accept(final FighterVisitor v) {
-        v.attack(this);
-    }
-
-    public float getBackstabModifier() {
-        return backstabModifier;
-    }
-
-    public void setBackstabModifier(float backstabModifier) {
-        this.backstabModifier = backstabModifier;
-    }
-
-    public float getParalysisModifier() {
-        return paralysisModifier;
-    }
-
-    public void setParalysisModifier(float paralysisModifier) {
-        this.paralysisModifier = paralysisModifier;
-    }
-
-    @Override
-    public void receiveAngelPower(AngelVisitor angelVisitor) {
+    public final void receiveAngelPower(final AngelVisitor angelVisitor) {
         angelVisitor.angelPower(this);
     }
 }
